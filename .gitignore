@@ -16,6 +16,8 @@ backend/build/
 backend/out/
 backend/bin/
 backend/.gradle/
+**/application-local.yml
+**/application-prod.yml
 *.log
 
 # ------------------------------------------------

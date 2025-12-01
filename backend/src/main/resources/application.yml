@@ -1,40 +1,15 @@
 spring:
-  # 1. Spring Security 로그인 설정
-  security:
-    user:
-      name: ${ADMIN_USERNAME:1}
-      password: ${ADMIN_PASSWORD:1}
+  application:
+    name: backend
+  profiles:
+    active: local # 기본적으로 local 설정을 읽어라!
 
-  # 2. MariaDB 데이터베이스 연결
+  # 2. MariaDB 드라이버 (어느 환경이든 드라이버 종류는 같음)
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/${DB_NAME:malldb}
-    username: ${DB_USERNAME:malldbuser}
-    password: ${DB_PASSWORD:malldbuser}
 
-  # 3. JPA (데이터베이스 관리) 설정
-  jpa:
-    hibernate:
-      ddl-auto: update # 프로젝트 실행 시 변경된 설정을 DB에 자동 반영
-    properties:
-      hibernate:
-        format_sql: true # SQL 로그를 보기 좋게 줄바꿈 해줌
-        show_sql: true # 실행되는 SQL을 콘솔에 출력 (디버깅용)
-
-  # 4. 파일 업로드 설정 (새로 추가된 부분)
+  # 4. 파일 업로드 설정 (운영이든 로컬이든 용량 제한은 보통 같게 둠)
   servlet:
     multipart:
-      max-file-size: 10MB # 파일 하나당 최대 크기 (기본값은 1MB로 너무 작음)
-      max-request-size: 10MB # 한 번의 요청에 담을 수 있는 전체 크기
-
-# 5. 로깅 설정 (새로 추가된 부분)
-logging:
-  level:
-    org.springframework.security: DEBUG # 시큐리티 관련 로그를 상세하게 봅니다 (로그인 실패 원인 분석 등)
-
-# 6. 커스텀 설정 (개발자가 직접 정의한 값)
-# com:
-#   equip:
-#     upload:
-#       # Mac 경로로 수정했습니다. 원하는 폴더로 변경하셔도 됩니다.
-#       path: /Users/Shared/upload/equip
+      max-file-size: 10MB
+      max-request-size: 10MB
