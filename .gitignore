@@ -35,3 +35,4 @@ frontend/npm-debug.log*
 .env.local
 upload/
 **/upload/
+project-task.md
