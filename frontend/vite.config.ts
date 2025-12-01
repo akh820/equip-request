@@ -11,13 +11,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // server: {
-  //   port: 3000,
-  //   proxy: {
-  //     "/api": {
-  //       target: "http://localhost:8080",
-  //       changeOrigin: true,
-  //     },
-  //   },
-  // },
+  server: {
+    port: 5173, // 기본 vite 포트
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true, // 내가 localhost:8080 출신이라고 속이는것
+      },
+    },
+  },
 });
