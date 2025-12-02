@@ -11,6 +11,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
     List<Equipment> findByCategory(String category);
 
     // 신청 가능한 비품만 조회
+    // SELECT * FROM equipment WHERE available = TRUE;
     List<Equipment> findByAvailableTrue();
 
     // 비품명으로 검색 = LIKE
