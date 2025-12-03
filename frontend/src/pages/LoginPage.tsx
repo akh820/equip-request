@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -30,13 +31,19 @@ export default function LoginPage() {
         refreshToken,
       } = response.data;
 
-      // authStore에 저장
       setAuth({ id, name, email: userEmail, role }, accessToken, refreshToken);
 
-      // 홈으로 이동
       navigate("/");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "로그인에 실패했습니다.");
+    } catch (err: unknown) {
+      //TypeGuard 사용해서 axiosError로 타입 좁히기
+      if (axios.isAxiosError(err)) {
+        const errorMessage =
+          err.response?.data?.message || "로그인에 실패했습니다.";
+        setError(errorMessage);
+      } else {
+        setError("알 수 없는 오류가 발생했습니다.");
+      }
+      setLoading(false);
     } finally {
       setLoading(false);
     }

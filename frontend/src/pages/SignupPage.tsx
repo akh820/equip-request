@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
 import { toast } from "sonner";
+import axios from "axios";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -26,8 +27,14 @@ export default function SignupPage() {
 
       // toast를 보여주고 로그인 페이지로 이동
       navigate("/login");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "회원가입에 실패했습니다.");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const errorMessage =
+          err.response?.data?.message || "회원가입에 실패했습니다.";
+        setError(errorMessage);
+      } else {
+        setError("알 수 없는 오류가 발생했습니다.");
+      }
       setLoading(false);
     }
   };
