@@ -45,6 +45,7 @@ export interface CartItem {
   equipmentName: string;
   imageUrl: string;
   quantity: number;
+  stock: number; // 재고 조사를 위해 추가
 }
 
 // 신청
