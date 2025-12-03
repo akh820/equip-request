@@ -1,53 +1,98 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import api from "@/lib/api";
+import { toast } from "sonner";
 
 export default function SignupPage() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await api.post("/auth/signup", { name, email, password });
+
+      // 회원가입 성공 시 toast 표시
+      toast.success("회원가입이 완료되었습니다!");
+
+      // toast를 보여주고 로그인 페이지로 이동
+      navigate("/login");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "회원가입에 실패했습니다.");
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex-1 flex items-center justify-center bg-slate-200 p-4 min-h-screen">
       <div className="bg-white p-8 rounded border border-slate-300 shadow-sm max-w-md w-full">
         <h2 className="text-xl font-bold mb-1 text-slate-800 text-center">
           회원가입
         </h2>
-        <p className="text-slate-500 mb-8 text-sm text-center">
-          Sign Up
-        </p>
+        <p className="text-slate-500 mb-8 text-sm text-center">Sign Up</p>
 
-        <form className="space-y-4">
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
+            {error}
+          </div>
+        )}
+
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               이름
             </label>
-            <input
+            <Input
               type="text"
-              className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="rounded"
               placeholder="홍길동"
+              required
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               이메일
             </label>
-            <input
+            <Input
               type="email"
-              className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="rounded"
               placeholder="user@example.com"
+              required
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               비밀번호
             </label>
-            <input
+            <Input
               type="password"
-              className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="rounded"
               placeholder="••••••••"
+              required
             />
           </div>
-          <button
+          <Button
             type="submit"
-            className="w-full py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition text-sm"
+            disabled={loading}
+            className="w-full my-5 py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            가입하기
-          </button>
+            {loading ? "가입 중..." : "가입하기"}
+          </Button>
         </form>
 
         <div className="mt-6 text-center text-sm text-slate-500">
