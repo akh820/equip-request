@@ -9,7 +9,14 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // TODO: 나중에 JWT 토큰 추가
+    // zustand persist는 'auth-storage' 키에 JSON으로 저장
+    const authStorage = localStorage.getItem("auth-storage");
+    if (authStorage) {
+      const { state } = JSON.parse(authStorage);
+      if (state?.accessToken) {
+        config.headers.Authorization = `Bearer ${state.accessToken}`;
+      }
+    }
     return config;
   },
   (error) => {
