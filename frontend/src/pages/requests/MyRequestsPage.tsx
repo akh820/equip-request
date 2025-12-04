@@ -39,7 +39,7 @@ export default function MyRequestsPage() {
       }
 
       try {
-        const response = await api.get(`/requests/my/${user.id}`);
+        const response = await api.get("/requests/my");
         setRequests(response.data);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {

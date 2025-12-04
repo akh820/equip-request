@@ -1,15 +1,22 @@
 package backend.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import backend.domain.EquipmentRequest;
 import backend.service.EquipmentRequestService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/requests")
@@ -19,7 +26,12 @@ public class EquipmentRequestController {
     private final EquipmentRequestService requestService;
 
     @PostMapping
-    public ResponseEntity<CreateRequestResponse> create(@RequestBody CreateRequestRequest request) {
+    public ResponseEntity<CreateRequestResponse> create(
+            Authentication authentication,
+            @RequestBody CreateRequestRequest request) {
+        // JWT에서 userId 추출
+        Long userId = Long.parseLong(authentication.getName());
+
         List<EquipmentRequestService.RequestItemDto> items = request.getItems().stream()
                 .map(item -> new EquipmentRequestService.RequestItemDto(
                         item.getEquipmentId(),
@@ -27,12 +39,15 @@ public class EquipmentRequestController {
                 ))
                 .collect(Collectors.toList());
 
-        Long requestId = requestService.createRequest(request.getUserId(), items);
+        Long requestId = requestService.createRequest(userId, items);
         return ResponseEntity.ok(new CreateRequestResponse(requestId, "신청 완료"));
     }
 
-    @GetMapping("/my/{userId}")
-    public ResponseEntity<List<RequestResponse>> findMyRequests(@PathVariable Long userId) {
+    @GetMapping("/my")
+    public ResponseEntity<List<RequestResponse>> findMyRequests(Authentication authentication) {
+        // JWT에서 userId 추출
+        Long userId = Long.parseLong(authentication.getName());
+
         List<EquipmentRequest> requests = requestService.findMyRequests(userId);
         List<RequestResponse> response = requests.stream()
                 .map(RequestResponse::from)
