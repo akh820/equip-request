@@ -33,7 +33,7 @@ export default function LoginPage() {
 
       setAuth({ id, name, email: userEmail, role }, accessToken, refreshToken);
 
-      navigate("/");
+      navigate("/equipment");
     } catch (err: unknown) {
       //TypeGuard 사용해서 axiosError로 타입 좁히기
       if (axios.isAxiosError(err)) {

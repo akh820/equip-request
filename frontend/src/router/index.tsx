@@ -4,7 +4,6 @@ import BasicLayout from "@/layouts/BasicLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Loading from "@/common/Loading";
 
-const HomePage = lazy(() => import("@/pages/HomePage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
 const EquipmentListPage = lazy(
@@ -51,7 +50,7 @@ const router = createBrowserRouter([
         index: true,
         element: (
           <Suspense fallback={<Loading />}>
-            <HomePage />
+            <EquipmentListPage />
           </Suspense>
         ),
       },

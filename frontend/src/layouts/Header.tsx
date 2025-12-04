@@ -26,7 +26,10 @@ export default function Header() {
   return (
     <header className="bg-slate-800 text-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 h-14 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-3 hover:opacity-90">
+        <Link
+          to="/equipment"
+          className="flex items-center gap-3 hover:opacity-90"
+        >
           <div className="w-8 h-8 bg-white text-slate-800 rounded flex items-center justify-center font-bold">
             EQ
           </div>
@@ -36,15 +39,11 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex h-full">
-          <NavLink to="/" className={getNavLinkClass} end>
-            홈
-          </NavLink>
-
           <NavLink to="/equipment" className={getNavLinkClass}>
             비품목록
           </NavLink>
 
-          {isAuthenticated && (
+          {isAuthenticated && !isAdmin && (
             <NavLink to="/my-requests" className={getNavLinkClass}>
               신청내역
             </NavLink>
@@ -60,24 +59,28 @@ export default function Header() {
         <div className="flex items-center gap-4 text-sm">
           {isAuthenticated ? (
             <>
-              <NavLink
-                to="/cart"
-                className={({ isActive }) =>
-                  `flex items-center gap-1 transition ${
-                    isActive ? "text-blue-300" : "hover:text-blue-300"
-                  }`
-                }
-              >
-                <ShoppingCart size={16} />
-                <span>장바구니</span>
-                {cartCount > 0 && (
-                  <span className="bg-blue-600 text-white text-xs px-1.5 rounded-full min-w-[20px] text-center">
-                    {cartCount}
-                  </span>
-                )}
-              </NavLink>
+              {!isAdmin && (
+                <>
+                  <NavLink
+                    to="/cart"
+                    className={({ isActive }) =>
+                      `flex items-center gap-1 transition ${
+                        isActive ? "text-blue-300" : "hover:text-blue-300"
+                      }`
+                    }
+                  >
+                    <ShoppingCart size={16} />
+                    <span>장바구니</span>
+                    {cartCount > 0 && (
+                      <span className="bg-blue-600 text-white text-xs px-1.5 rounded-full min-w-[20px] text-center">
+                        {cartCount}
+                      </span>
+                    )}
+                  </NavLink>
 
-              <div className="w-px h-4 bg-slate-600"></div>
+                  <div className="w-px h-4 bg-slate-600"></div>
+                </>
+              )}
 
               <div className="flex items-center gap-2">
                 <span className="text-slate-200">{user?.name}</span>
