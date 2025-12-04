@@ -54,7 +54,6 @@ export default function CartPage() {
     setLoading(true);
     try {
       const requestData = {
-        userId: user.id,
         items: items.map((item) => ({
           equipmentId: item.equipmentId,
           quantity: item.quantity,
