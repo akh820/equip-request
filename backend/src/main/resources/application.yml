@@ -3,6 +3,7 @@ spring:
     name: backend
   profiles:
     active: local # 기본적으로 local 설정을 읽어라!
+    include: secret #
 
   # 2. MariaDB 드라이버 (어느 환경이든 드라이버 종류는 같음)
   datasource:
