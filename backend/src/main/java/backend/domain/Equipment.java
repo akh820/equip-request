@@ -39,4 +39,14 @@ public class Equipment extends BaseEntity {
     public void increaseStock(int quantity) {
         this.stock += quantity;
     }
+
+    public void update(String name, String description, String category,
+                       String imageUrl, Integer stock, Boolean available) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.imageUrl = imageUrl;
+        this.stock = stock;
+        this.available = available;
+    }
 }

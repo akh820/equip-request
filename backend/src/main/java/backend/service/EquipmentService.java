@@ -63,4 +63,17 @@ public class EquipmentService {
         Equipment equipment = findById(equipmentId);
         equipment.increaseStock(quantity);
     }
+
+    @Transactional
+    public void update(Long id, String name, String description, String category,
+                       String imageUrl, Integer stock, Boolean available) {
+        Equipment equipment = findById(id);
+        equipment.update(name, description, category, imageUrl, stock, available);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Equipment equipment = findById(id);
+        equipmentRepository.delete(equipment);
+    }
 }
