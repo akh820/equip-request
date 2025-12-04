@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router";
 import api from "@/lib/api";
 import axios from "axios";
 import { useCartStore } from "@/stores/cartStore";
+import { useAuthStore } from "@/stores/authStore";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Loading from "@/common/Loading";
@@ -22,11 +23,14 @@ interface Equipment {
 export default function EquipmentDetailPage() {
   const { id } = useParams();
   const { addItem } = useCartStore();
+  const { user } = useAuthStore();
 
   const [equipment, setEquipment] = useState<Equipment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(1);
+
+  const isAdmin = user?.role === "ADMIN";
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -155,8 +159,8 @@ export default function EquipmentDetailPage() {
               </div>
             </div>
 
-            {/* 수량 선택 */}
-            {equipment.available && equipment.stock > 0 && (
+            {/* 수량 선택 (관리자는 숨김) */}
+            {!isAdmin && equipment.available && equipment.stock > 0 && (
               <div className="mb-6">
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   수량
@@ -190,17 +194,19 @@ export default function EquipmentDetailPage() {
 
             {/* 버튼 */}
             <div className="mt-auto space-y-3">
-              <Button
-                onClick={handleAddToCart}
-                disabled={!equipment.available || equipment.stock === 0}
-                className="w-full py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {equipment.stock === 0
-                  ? "재고 없음"
-                  : !equipment.available
-                  ? "신청 불가"
-                  : "장바구니 담기"}
-              </Button>
+              {!isAdmin && (
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={!equipment.available || equipment.stock === 0}
+                  className="w-full py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {equipment.stock === 0
+                    ? "재고 없음"
+                    : !equipment.available
+                    ? "신청 불가"
+                    : "장바구니 담기"}
+                </Button>
+              )}
 
               <Link
                 to="/equipment"
