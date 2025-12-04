@@ -43,7 +43,10 @@ export default function MyRequestsPage() {
         setRequests(response.data);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
-          setError(err.response?.data?.message || "신청 내역을 불러오는데 실패했습니다.");
+          setError(
+            err.response?.data?.message ||
+              "신청 내역을 불러오는데 실패했습니다."
+          );
         } else {
           setError("알 수 없는 오류가 발생했습니다.");
         }
@@ -126,54 +129,64 @@ export default function MyRequestsPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {requests.map((request) => (
-            <div
-              key={request.id}
-              className="bg-white border border-slate-300 rounded shadow-sm overflow-hidden"
-            >
-              {/* 헤더 */}
-              <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-slate-600">
-                    신청일: {formatDate(request.createdAt)}
-                  </span>
-                  {request.processedAt && (
+          {requests
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            .map((request) => (
+              <div
+                key={request.id}
+                className="bg-white border border-slate-300 rounded shadow-sm overflow-hidden"
+              >
+                {/* 헤더 */}
+                <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
+                  <div className="flex items-center gap-4">
                     <span className="text-sm text-slate-600">
-                      처리일: {formatDate(request.processedAt)}
+                      신청일: {formatDate(request.createdAt)}
                     </span>
+                    {request.processedAt && (
+                      <span className="text-sm text-slate-600">
+                        처리일: {formatDate(request.processedAt)}
+                      </span>
+                    )}
+                  </div>
+                  {getStatusBadge(request.status)}
+                </div>
+
+                {/* 비품 목록 */}
+                <div className="p-4">
+                  <div className="space-y-2">
+                    {request.items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <span className="text-slate-800 font-medium">
+                          {item.equipmentName}
+                        </span>
+                        <span className="text-slate-600">
+                          {item.quantity}개
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 반려 사유 */}
+                  {request.status === "REJECTED" && request.rejectReason && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
+                      <p className="text-xs text-red-600 font-medium mb-1">
+                        반려 사유
+                      </p>
+                      <p className="text-sm text-red-700">
+                        {request.rejectReason}
+                      </p>
+                    </div>
                   )}
                 </div>
-                {getStatusBadge(request.status)}
               </div>
-
-              {/* 비품 목록 */}
-              <div className="p-4">
-                <div className="space-y-2">
-                  {request.items.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between text-sm"
-                    >
-                      <span className="text-slate-800 font-medium">
-                        {item.equipmentName}
-                      </span>
-                      <span className="text-slate-600">{item.quantity}개</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* 반려 사유 */}
-                {request.status === "REJECTED" && request.rejectReason && (
-                  <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
-                    <p className="text-xs text-red-600 font-medium mb-1">
-                      반려 사유
-                    </p>
-                    <p className="text-sm text-red-700">{request.rejectReason}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
     </div>
