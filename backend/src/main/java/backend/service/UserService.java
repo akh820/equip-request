@@ -3,6 +3,7 @@ package backend.service;
 import backend.domain.User;
 import backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원가입
     @Transactional
@@ -23,7 +25,7 @@ public class UserService {
 
         User user = User.builder()
                 .email(email)
-                .password(password)  // TODO: BCrypt 추가
+                .password(passwordEncoder.encode(password))
                 .name(name)
                 .role(User.UserRole.USER)
                 .build();
