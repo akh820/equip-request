@@ -1,14 +1,20 @@
 package backend.service;
 
-import backend.domain.*;
-import backend.repository.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import backend.domain.Equipment;
+import backend.domain.EquipmentRequest;
+import backend.domain.RequestItem;
+import backend.domain.User;
+import backend.repository.EquipmentRepository;
+import backend.repository.EquipmentRequestRepository;
+import backend.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -46,11 +52,11 @@ public class EquipmentRequestService {
     }
 
     public List<EquipmentRequest> findMyRequests(Long userId) {
-        return requestRepository.findByUserId(userId);
+        return requestRepository.findByUserIdWithItems(userId);
     }
 
     public List<EquipmentRequest> findAll() {
-        return requestRepository.findAll();
+        return requestRepository.findAllWithItems();
     }
 
     public List<EquipmentRequest> findByStatus(EquipmentRequest.RequestStatus status) {
@@ -59,7 +65,8 @@ public class EquipmentRequestService {
 
     @Transactional
     public void approve(Long requestId) {
-        EquipmentRequest request = requestRepository.findById(requestId)
+        // N+1 최적화: Fetch Join 사용 (items와 equipment를 함께 조회)
+        EquipmentRequest request = requestRepository.findByIdWithItems(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("신청을 찾을 수 없습니다."));
 
         request.approve();

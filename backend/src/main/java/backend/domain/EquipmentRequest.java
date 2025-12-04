@@ -1,11 +1,24 @@
 package backend.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "equipment_requests")
@@ -28,8 +41,8 @@ public class EquipmentRequest extends BaseEntity {
 
     @Column(name = "processed_at")
     private LocalDateTime processedAt;
-
-    @OneToMany(mappedBy = "equipmentRequest", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //fetch = FetchType.EAGET => LAZY
+    @OneToMany(mappedBy = "equipmentRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<RequestItem> items = new ArrayList<>();
 
