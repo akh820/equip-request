@@ -15,6 +15,7 @@ const EquipmentDetailPage = lazy(
 );
 const CartPage = lazy(() => import("@/pages/cart/CartPage"));
 const MyRequestsPage = lazy(() => import("@/pages/requests/MyRequestsPage"));
+const AdminPage = lazy(() => import("@/pages/admin/AdminPage"));
 const AdminEquipmentPage = lazy(
   () => import("@/pages/admin/AdminEquipmentPage")
 );
@@ -41,9 +42,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      // <ProtectedRoute>
-      <BasicLayout />
-      // </ProtectedRoute>
+      <ProtectedRoute>
+        <BasicLayout />
+      </ProtectedRoute>
     ),
     children: [
       {
@@ -84,6 +85,16 @@ const router = createBrowserRouter([
           <Suspense fallback={<Loading />}>
             <MyRequestsPage />
           </Suspense>
+        ),
+      },
+      {
+        path: "admin",
+        element: (
+          <ProtectedRoute adminOnly>
+            <Suspense fallback={<Loading />}>
+              <AdminPage />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
