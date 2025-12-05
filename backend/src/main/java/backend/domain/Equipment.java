@@ -30,7 +30,8 @@ public class Equipment extends BaseEntity {
     private Boolean available;
 
     @Version
-    private Long version;
+    @Builder.Default
+    private Long version = 0L;
 
     public void decreaseStock(int quantity) {
         if (this.stock < quantity) {
