@@ -29,6 +29,9 @@ public class Equipment extends BaseEntity {
     @Column(nullable = false)
     private Boolean available;
 
+    @Version
+    private Long version;
+
     public void decreaseStock(int quantity) {
         if (this.stock < quantity) {
             throw new IllegalStateException("재고가 부족합니다.");
