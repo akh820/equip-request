@@ -1,7 +1,10 @@
 import axios from "axios";
 
+// 환경변수에서 API URL 가져오기
+// 개발: /api (Vite proxy)
+// 배포: Railway URL
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_URL || "/api",
   headers: {
     "Content-Type": "application/json",
   },
