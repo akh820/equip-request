@@ -1,11 +1,11 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import api from "@/lib/api";
-import axios from "axios";
 import Loading from "@/common/Loading";
 import { RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Virtuoso } from "react-virtuoso";
+import { useQuery } from "@tanstack/react-query";
 
 interface Equipment {
   id: number;
@@ -20,32 +20,19 @@ interface Equipment {
 
 export default function EquipmentListPage() {
   const navigate = useNavigate();
-  const [allEquipments, setAllEquipments] = useState<Equipment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
 
-  useEffect(() => {
-    const fetchEquipments = async () => {
-      try {
-        const response = await api.get("/equipment");
-        setAllEquipments(response.data);
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          setError(
-            err.response?.data?.message ||
-              "비품 목록을 불러오는데 실패했습니다."
-          );
-        } else {
-          setError("알 수 없는 오류가 발생했습니다.");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEquipments();
-  }, []);
+  const {
+    data: allEquipments = [],
+    isLoading,
+    error,
+  } = useQuery<Equipment[]>({
+    queryKey: ["equipments"],
+    queryFn: async () => {
+      const response = await api.get("/equipment");
+      return response.data;
+    },
+  });
 
   // 클라이언트 사이드 필터링
   const filteredEquipments = searchKeyword.trim()
@@ -72,15 +59,19 @@ export default function EquipmentListPage() {
     navigate(`/equipment/${id}`);
   };
 
-  if (loading) {
+  // 로딩 중일 때
+  if (isLoading) {
     return <Loading />;
   }
 
+  // 에러 발생 시
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700">
-          {error}
+          {error instanceof Error
+            ? error.message
+            : "비품 목록을 불러오는데 실패했습니다."}
         </div>
       </div>
     );
