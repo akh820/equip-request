@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import api from "@/lib/api";
 import axios from "axios";
 import Loading from "@/common/Loading";
+import { RotateCcw, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Equipment {
   id: number;
@@ -17,15 +19,16 @@ interface Equipment {
 
 export default function EquipmentListPage() {
   const navigate = useNavigate();
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
+  const [allEquipments, setAllEquipments] = useState<Equipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     const fetchEquipments = async () => {
       try {
         const response = await api.get("/equipment");
-        setEquipments(response.data);
+        setAllEquipments(response.data);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
           setError(
@@ -42,6 +45,17 @@ export default function EquipmentListPage() {
 
     fetchEquipments();
   }, []);
+
+  // 클라이언트 사이드 필터링
+  const filteredEquipments = searchKeyword.trim()
+    ? allEquipments.filter((equipment) =>
+        equipment.name.toLowerCase().includes(searchKeyword.toLowerCase())
+      )
+    : allEquipments;
+
+  const handleReset = () => {
+    setSearchKeyword("");
+  };
 
   const handleCardClick = (id: number) => {
     navigate(`/equipment/${id}`);
@@ -63,13 +77,42 @@ export default function EquipmentListPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-800">비품 목록</h2>
-        <p className="text-sm text-slate-500 mt-1">Equipment List</p>
+      <div className="flex items-center justify-between bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
+        <div className="">
+          <h2 className="text-lg font-bold text-slate-800">비품 목록</h2>
+          <p className="text-sm text-slate-500 mt-1">Equipment List</p>
+        </div>
+
+        {/* 검색 */}
+        <div className="flex items-center">
+          <div className="relative max-w-md">
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
+              size={20}
+            />
+            <input
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              placeholder="비품 이름으로 검색..."
+              className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+            />
+          </div>
+          <div className="mx-2">
+            <Button
+              onClick={handleReset}
+              className="px-5 py-5 border"
+              variant="outline"
+              size="icon"
+            >
+              <RotateCcw />
+            </Button>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {equipments.map((equipment) => (
+        {filteredEquipments.map((equipment) => (
           <div
             key={equipment.id}
             onClick={() => handleCardClick(equipment.id)}
@@ -118,9 +161,13 @@ export default function EquipmentListPage() {
         ))}
       </div>
 
-      {equipments.length === 0 && (
+      {filteredEquipments.length === 0 && (
         <div className="bg-white border border-slate-300 rounded p-12 text-center text-slate-500">
-          <p>등록된 비품이 없습니다.</p>
+          <p>
+            {searchKeyword
+              ? `"${searchKeyword}"에 대한 검색 결과가 없습니다.`
+              : "등록된 비품이 없습니다."}
+          </p>
         </div>
       )}
     </div>
