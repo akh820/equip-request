@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ConfirmButton } from "@/components/ui/alert-dialog";
+import { Select, SelectCustom } from "@/components/ui/select";
 
 interface Equipment {
   id: number;
@@ -96,6 +97,7 @@ export default function AdminEquipmentPage() {
       });
     }
     setIsFormOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleCloseForm = () => {
@@ -206,13 +208,20 @@ export default function AdminEquipmentPage() {
                 <label className="block text-sm font-medium text-slate-700 mb-1">
                   카테고리 <span className="text-red-500">*</span>
                 </label>
-                <Input
-                  type="text"
+                <SelectCustom
                   value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, category: value })
                   }
-                  placeholder="카테고리를 입력하세요"
+                  options={[
+                    { value: "laptop", label: "노트북" },
+                    { value: "monitor", label: "모니터" },
+                    { value: "peripherals", label: "주변기기" },
+                    { value: "office_supplies", label: "사무용품" },
+                    { value: "furniture", label: "가구" },
+                    { value: "others", label: "기타" },
+                  ]}
+                  placeholder="카테고리를 선택하세요"
                   required
                 />
               </div>
@@ -268,19 +277,21 @@ export default function AdminEquipmentPage() {
                 <label className="block text-sm font-medium text-slate-700 mb-1">
                   신청 가능 여부
                 </label>
-                <select
+                <SelectCustom
                   value={formData.available ? "true" : "false"}
-                  onChange={(e) =>
+                  onValueChange={(value) =>
                     setFormData({
                       ...formData,
-                      available: e.target.value === "true",
+                      available: value === "true",
                     })
                   }
-                  className="w-full border border-slate-300 rounded p-2 text-sm"
-                >
-                  <option value="true">가능</option>
-                  <option value="false">불가</option>
-                </select>
+                  options={[
+                    { value: "true", label: "가능" },
+                    { value: "false", label: "불가" },
+                  ]}
+                  placeholder="신청 가능 여부"
+                  label="신청 가능 여부"
+                />
               </div>
             </div>
 
