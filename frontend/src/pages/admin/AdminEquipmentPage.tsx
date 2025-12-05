@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "@/stores/authStore";
 import api from "@/lib/api";
-import axios from "axios";
 import Loading from "@/common/Loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ConfirmButton } from "@/components/ui/alert-dialog";
-import { Select, SelectCustom } from "@/components/ui/select";
+import { SelectCustom } from "@/components/ui/select";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Equipment {
   id: number;
@@ -30,12 +30,18 @@ interface EquipmentForm {
   available: boolean;
 }
 
+type AxiosErrorType = {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+};
+
 export default function AdminEquipmentPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const queryClient = useQueryClient(); // 캐시 관리 도구
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState<EquipmentForm>({
@@ -47,32 +53,65 @@ export default function AdminEquipmentPage() {
     available: true,
   });
 
+  const {
+    data: equipments = [],
+    isLoading,
+    error,
+  } = useQuery<Equipment[]>({
+    queryKey: ["equipments"],
+    queryFn: async () => {
+      const response = await api.get("/equipment");
+      return response.data;
+    },
+    enabled: user?.role === "ADMIN", // 관리자일 때만 쿼리 실행
+  });
+
   useEffect(() => {
     if (user?.role !== "ADMIN") {
       toast.error("관리자만 접근 가능합니다.");
       navigate("/");
-      return;
     }
-
-    fetchEquipments();
   }, [user, navigate]);
 
-  const fetchEquipments = async () => {
-    try {
-      const response = await api.get("/equipment");
-      setEquipments(response.data);
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        setError(
-          err.response?.data?.message || "비품 목록을 불러오는데 실패했습니다."
-        );
-      } else {
-        setError("알 수 없는 오류가 발생했습니다.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const createMutation = useMutation({
+    mutationFn: (data: EquipmentForm) => api.post("/equipment", data),
+    onSuccess: () => {
+      toast.success("비품이 등록되었습니다.");
+      handleCloseForm();
+      // 캐시 무효화 → 자동으로 목록 새로고침!
+      queryClient.invalidateQueries({ queryKey: ["equipments"] });
+    },
+    onError: (error: Error) => {
+      const err = error as AxiosErrorType;
+      toast.error(err.response?.data?.message || "등록에 실패했습니다.");
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: EquipmentForm }) =>
+      api.put(`/equipment/${id}`, data),
+    onSuccess: () => {
+      toast.success("비품이 수정되었습니다.");
+      handleCloseForm();
+      queryClient.invalidateQueries({ queryKey: ["equipments"] });
+    },
+    onError: (error: Error) => {
+      const err = error as AxiosErrorType;
+      toast.error(err.response?.data?.message || "수정에 실패했습니다.");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => api.delete(`/equipment/${id}`),
+    onSuccess: () => {
+      toast.success("비품이 삭제되었습니다.");
+      queryClient.invalidateQueries({ queryKey: ["equipments"] });
+    },
+    onError: (error: Error) => {
+      const err = error as AxiosErrorType;
+      toast.error(err.response?.data?.message || "삭제에 실패했습니다.");
+    },
+  });
 
   const handleOpenForm = (equipment?: Equipment) => {
     if (equipment) {
@@ -105,7 +144,7 @@ export default function AdminEquipmentPage() {
     setEditingId(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name || !formData.category) {
@@ -113,43 +152,18 @@ export default function AdminEquipmentPage() {
       return;
     }
 
-    try {
-      if (editingId) {
-        await api.put(`/equipment/${editingId}`, formData);
-        toast.success("비품이 수정되었습니다.");
-      } else {
-        await api.post("/equipment", formData);
-        toast.success("비품이 등록되었습니다.");
-      }
-      handleCloseForm();
-      fetchEquipments();
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        toast.error(
-          err.response?.data?.message ||
-            (editingId ? "수정에 실패했습니다." : "등록에 실패했습니다.")
-        );
-      } else {
-        toast.error("알 수 없는 오류가 발생했습니다.");
-      }
+    if (editingId) {
+      updateMutation.mutate({ id: editingId, data: formData });
+    } else {
+      createMutation.mutate(formData);
     }
   };
 
-  const handleDelete = async (id: number) => {
-    try {
-      await api.delete(`/equipment/${id}`);
-      toast.success("비품이 삭제되었습니다.");
-      fetchEquipments();
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data?.message || "삭제에 실패했습니다.");
-      } else {
-        toast.error("알 수 없는 오류가 발생했습니다.");
-      }
-    }
+  const handleDelete = (id: number) => {
+    deleteMutation.mutate(id);
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -157,7 +171,9 @@ export default function AdminEquipmentPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700">
-          {error}
+          {error instanceof Error
+            ? error.message
+            : "비품 목록을 불러오는데 실패했습니다."}
         </div>
       </div>
     );
