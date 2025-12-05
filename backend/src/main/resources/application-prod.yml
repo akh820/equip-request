@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # ← MySQL로 변경
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+        generate_statistics: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+    "[org.hibernate.SQL]": WARN
+
+server:
+  port: ${PORT:8080}
