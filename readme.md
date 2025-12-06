@@ -8,6 +8,8 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+### [🌐 사내비품관리시스템 접속하기](https://frontend-production-851a.up.railway.app/)
+
 사내 비품의 효율적인 관리 및 신청을 위한 풀스택 웹 애플리케이션
 
 [주요 기능](#-주요-기능) • [기술 스택](#️-기술-스택) • [시작하기](#-시작하기) • [API 문서](#-api-문서)
@@ -175,7 +177,7 @@ yarn install
 
 ```env
 # Database
-DB_URL=jdbc:mysql://localhost:3306/malldb?useSSL=false&serverTimezone=Asia/Seoul
+DB_URL=jdbc:mysql://localhost:3306/equipment_request_db?useSSL=false&serverTimezone=Asia/Seoul
 DB_USERNAME=root
 DB_PASSWORD=your_password
 
