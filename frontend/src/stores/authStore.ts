@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { User } from "@/types";
+import { useCartStore } from "./cartStore";
 
 interface AuthState {
   user: User | null;
@@ -21,21 +22,27 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       isAuthenticated: false,
 
-      setAuth: (user, accessToken, refreshToken) =>
+      setAuth: (user, accessToken, refreshToken) => {
         set({
           user,
           accessToken,
           refreshToken,
           isAuthenticated: true,
-        }),
+        });
+        // 로그인 시 이전 사용자의 카트 데이터 초기화
+        useCartStore.getState().clearCart();
+      },
 
-      logout: () =>
+      logout: () => {
         set({
           user: null,
           accessToken: null,
           refreshToken: null,
           isAuthenticated: false,
-        }),
+        });
+        // 로그아웃 시 카트도 함께 초기화
+        useCartStore.getState().clearCart();
+      },
 
       updateToken: (accessToken) => set({ accessToken }),
     }),

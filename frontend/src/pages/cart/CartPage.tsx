@@ -156,7 +156,7 @@ export default function CartPage() {
                 <div className="col-span-1 text-right">
                   <button
                     onClick={() => handleRemoveItem(item.equipmentId)}
-                    className="border border-red-500 rounded px-2 py-1 text-rose-400 hover:text-rose-500 text-sm cursor-pointer"
+                    className="rounded px-2 py-1 text-red-500 hover:text-rose-500 text-sm cursor-pointer"
                   >
                     {t("common.delete")}
                   </button>
