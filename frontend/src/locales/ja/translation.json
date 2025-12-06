@@ -95,6 +95,12 @@
     "processedDate": "処理日",
     "rejectReason": "却下理由",
     "failedToLoad": "申請履歴の読み込みに失敗しました。",
+    "stats": {
+      "pending": "処理待ち",
+      "approved": "承認完了",
+      "rejected": "却下",
+      "count": "{{count}}件"
+    },
     "status": {
       "pending": "処理待ち",
       "approved": "承認済み",

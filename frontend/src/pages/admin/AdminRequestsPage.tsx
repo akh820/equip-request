@@ -80,7 +80,7 @@ export default function AdminRequestsPage() {
 
   const handleRejectSubmit = async (requestId: number) => {
     if (!rejectReason.trim()) {
-      toast.error("반려 사유를 입력해주세요.");
+      toast.error(t("admin.requests.rejectReasonPlaceholder"));
       return;
     }
 
@@ -172,24 +172,24 @@ export default function AdminRequestsPage() {
       <div className="bg-white border border-slate-300 rounded mb-4 p-4">
         <div className="grid grid-cols-3 gap-4">
           <div className="border border-slate-300 rounded p-3 border-l-4 border-l-yellow-500">
-            <div className="text-xs text-slate-500 font-bold">처리 대기</div>
+            <div className="text-xs text-slate-500 font-bold">{t("requests.stats.pending")}</div>
             <div className="text-2xl font-bold text-slate-800 mt-1">
               {stats.pending}{" "}
-              <span className="text-sm font-normal text-slate-500">건</span>
+              <span className="text-sm font-normal text-slate-500">{i18n.language === "ja" ? "件" : "건"}</span>
             </div>
           </div>
           <div className="border border-slate-300 rounded p-3 border-l-4 border-l-green-500">
-            <div className="text-xs text-slate-500 font-bold">승인 완료</div>
+            <div className="text-xs text-slate-500 font-bold">{t("requests.stats.approved")}</div>
             <div className="text-2xl font-bold text-slate-800 mt-1">
               {stats.approved}{" "}
-              <span className="text-sm font-normal text-slate-500">건</span>
+              <span className="text-sm font-normal text-slate-500">{i18n.language === "ja" ? "件" : "건"}</span>
             </div>
           </div>
           <div className="border border-slate-300 rounded p-3 border-l-4 border-l-red-500">
-            <div className="text-xs text-slate-500 font-bold">반려</div>
+            <div className="text-xs text-slate-500 font-bold">{t("requests.stats.rejected")}</div>
             <div className="text-2xl font-bold text-slate-800 mt-1">
               {stats.rejected}{" "}
-              <span className="text-sm font-normal text-slate-500">건</span>
+              <span className="text-sm font-normal text-slate-500">{i18n.language === "ja" ? "件" : "건"}</span>
             </div>
           </div>
         </div>

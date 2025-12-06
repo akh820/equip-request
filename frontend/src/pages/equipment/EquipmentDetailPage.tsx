@@ -118,7 +118,7 @@ export default function EquipmentDetailPage() {
           <div className="flex flex-col">
             <div className="mb-2">
               <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
-                {equipment.category}
+                {t(`admin.equipment.categories.${equipment.category}`)}
               </span>
             </div>
 

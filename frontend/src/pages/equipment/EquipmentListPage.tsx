@@ -67,9 +67,7 @@ export default function EquipmentListPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700">
-          {error instanceof Error
-            ? error.message
-            : t("equipment.failedToLoad")}
+          {error instanceof Error ? error.message : t("equipment.failedToLoad")}
         </div>
       </div>
     );
@@ -79,8 +77,12 @@ export default function EquipmentListPage() {
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
         <div className="">
-          <h2 className="text-lg font-bold text-slate-800">{t("equipment.title")}</h2>
-          <p className="text-sm text-slate-500 mt-1">{t("equipment.subtitle")}</p>
+          <h2 className="text-lg font-bold text-slate-800">
+            {t("equipment.title")}
+          </h2>
+          <p className="text-sm text-slate-500 mt-1">
+            {t("equipment.subtitle")}
+          </p>
         </div>
 
         <div className="flex items-center">
@@ -127,53 +129,79 @@ export default function EquipmentListPage() {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6"
               key={`row-${index}`}
             >
-              {row.map((equipment) => (
-                <div
-                  key={equipment.id}
-                  onClick={() => handleCardClick(equipment.id)}
-                  className="bg-white border border-slate-300 rounded shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden"
-                >
-                  <div className="h-48 overflow-hidden bg-slate-100">
-                    <img
-                      src={equipment.imageUrl}
-                      alt={equipment.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
-                        {equipment.category}
-                      </span>
-                      {!equipment.available && (
-                        <span className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded">
-                          {t("equipment.notAvailable")}
-                        </span>
+              {row.map((equipment) => {
+                const isUnavailable =
+                  !equipment.available || equipment.stock === 0;
+                const unavailableReason =
+                  equipment.stock === 0
+                    ? t("equipment.outOfStock")
+                    : t("equipment.notAvailable");
+
+                return (
+                  <div
+                    key={equipment.id}
+                    onClick={() => handleCardClick(equipment.id)}
+                    className="bg-white border border-slate-300 rounded shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden group"
+                  >
+                    <div className="h-48 bg-slate-200 relative overflow-hidden">
+                      <img
+                        src={equipment.imageUrl}
+                        alt={equipment.name}
+                        className={`w-full h-full object-cover transition-all duration-300 ${
+                          isUnavailable ? "opacity-40 grayscale" : "opacity-100"
+                        }`}
+                      />
+
+                      {isUnavailable && (
+                        <div className="absolute inset-0 flex items-center justify-center z-10 p-4">
+                          {/* 라벨 디자인은 유지 */}
+                          <div className="bg-red-600/60 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-md backdrop-blur-sm">
+                            {unavailableReason}
+                          </div>
+                        </div>
                       )}
                     </div>
-                    <h3 className="text-base font-semibold text-slate-800 mb-2">
-                      {equipment.name}
-                    </h3>
-                    <p className="text-sm text-slate-600 mb-3 line-clamp-2">
-                      {equipment.description}
-                    </p>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-500">{t("equipment.stock")}</span>
-                      <span
-                        className={`font-semibold ${
-                          equipment.stock === 0
-                            ? "text-red-600"
-                            : equipment.stock < 5
-                            ? "text-orange-600"
-                            : "text-green-600"
-                        }`}
-                      >
-                        {t("equipment.stockCount", { count: equipment.stock })}
-                      </span>
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                          {t(
+                            `admin.equipment.categories.${equipment.category}`
+                          )}
+                        </span>
+                        {!equipment.available && (
+                          <span className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded">
+                            {t("equipment.notAvailable")}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-base font-semibold text-slate-800 mb-2">
+                        {equipment.name}
+                      </h3>
+                      <p className="text-sm text-slate-600 mb-3 line-clamp-2">
+                        {equipment.description}
+                      </p>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-500">
+                          {t("equipment.stock")}
+                        </span>
+                        <span
+                          className={`font-semibold ${
+                            equipment.stock === 0
+                              ? "text-red-600"
+                              : equipment.stock < 5
+                              ? "text-orange-600"
+                              : "text-green-600"
+                          }`}
+                        >
+                          {t("equipment.stockCount", {
+                            count: equipment.stock,
+                          })}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         />
@@ -181,4 +209,3 @@ export default function EquipmentListPage() {
     </div>
   );
 }
-

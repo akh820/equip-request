@@ -95,6 +95,12 @@
     "processedDate": "처리일",
     "rejectReason": "반려 사유",
     "failedToLoad": "신청 내역을 불러오는데 실패했습니다.",
+    "stats": {
+      "pending": "처리 대기",
+      "approved": "승인 완료",
+      "rejected": "반려",
+      "count": "{{count}}건"
+    },
     "status": {
       "pending": "대기 중",
       "approved": "승인됨",

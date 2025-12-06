@@ -10,6 +10,7 @@ import { ConfirmButton } from "@/components/ui/alert-dialog";
 import { SelectCustom } from "@/components/ui/select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import ImageUpload from "@/components/ImageUpload";
+import { useTranslation } from "react-i18next";
 
 interface Equipment {
   id: number;
@@ -42,6 +43,7 @@ type AxiosErrorType = {
 
 export default function AdminEquipmentPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const queryClient = useQueryClient(); // 캐시 관리 도구
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -71,10 +73,10 @@ export default function AdminEquipmentPage() {
 
   useEffect(() => {
     if (user?.role !== "ADMIN") {
-      toast.error("관리자만 접근 가능합니다.");
+      toast.error(t("admin.accessDenied"));
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, t]);
 
   const createMutation = useMutation({
     mutationFn: (formData: FormData) =>
@@ -82,13 +84,13 @@ export default function AdminEquipmentPage() {
         headers: { "Content-Type": "multipart/form-data" },
       }),
     onSuccess: () => {
-      toast.success("비품이 등록되었습니다.");
+      toast.success(t("admin.equipment.registered"));
       handleCloseForm();
       queryClient.invalidateQueries({ queryKey: ["equipments"] });
     },
     onError: (error: Error) => {
       const err = error as AxiosErrorType;
-      toast.error(err.response?.data?.message || "등록에 실패했습니다.");
+      toast.error(err.response?.data?.message || t("admin.equipment.registerFailed"));
     },
   });
 
@@ -98,25 +100,25 @@ export default function AdminEquipmentPage() {
         headers: { "Content-Type": "multipart/form-data" },
       }),
     onSuccess: () => {
-      toast.success("비품이 수정되었습니다.");
+      toast.success(t("admin.equipment.updated"));
       handleCloseForm();
       queryClient.invalidateQueries({ queryKey: ["equipments"] });
     },
     onError: (error: Error) => {
       const err = error as AxiosErrorType;
-      toast.error(err.response?.data?.message || "수정에 실패했습니다.");
+      toast.error(err.response?.data?.message || t("admin.equipment.updateFailed"));
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => api.delete(`/equipment/${id}`),
     onSuccess: () => {
-      toast.success("비품이 삭제되었습니다.");
+      toast.success(t("admin.equipment.deleted"));
       queryClient.invalidateQueries({ queryKey: ["equipments"] });
     },
     onError: (error: Error) => {
       const err = error as AxiosErrorType;
-      toast.error(err.response?.data?.message || "삭제에 실패했습니다.");
+      toast.error(err.response?.data?.message || t("admin.equipment.deleteFailed"));
     },
   });
 
@@ -157,7 +159,7 @@ export default function AdminEquipmentPage() {
     e.preventDefault();
 
     if (!formData.name || !formData.category) {
-      toast.error("이름과 카테고리는 필수입니다.");
+      toast.error(t("admin.equipment.nameRequired"));
       return;
     }
 
@@ -183,6 +185,16 @@ export default function AdminEquipmentPage() {
     deleteMutation.mutate(id);
   };
 
+  // 카테고리 옵션 (다국어 처리)
+  const categoryOptions = [
+    { value: "laptop", label: t("admin.equipment.categories.laptop") },
+    { value: "monitor", label: t("admin.equipment.categories.monitor") },
+    { value: "peripherals", label: t("admin.equipment.categories.peripherals") },
+    { value: "office_supplies", label: t("admin.equipment.categories.office_supplies") },
+    { value: "furniture", label: t("admin.equipment.categories.furniture") },
+    { value: "others", label: t("admin.equipment.categories.others") },
+  ];
+
   if (isLoading) {
     return <Loading />;
   }
@@ -193,7 +205,7 @@ export default function AdminEquipmentPage() {
         <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700">
           {error instanceof Error
             ? error.message
-            : "비품 목록을 불러오는데 실패했습니다."}
+            : t("equipment.failedToLoad")}
         </div>
       </div>
     );
@@ -204,17 +216,17 @@ export default function AdminEquipmentPage() {
       <div className="bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-slate-800">
-            관리자 - 비품 관리
+            {t("admin.equipment.title")}
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Admin - Equipment Management
+            {t("admin.equipment.subtitle")}
           </p>
         </div>
         <Button
           onClick={() => handleOpenForm()}
           className="bg-blue-600 hover:bg-blue-700 text-white"
         >
-          비품 등록
+          {t("admin.equipment.register")}
         </Button>
       </div>
 
@@ -222,13 +234,13 @@ export default function AdminEquipmentPage() {
       {isFormOpen && (
         <div className="bg-white border border-slate-300 rounded shadow-sm p-6 mb-6">
           <h3 className="text-lg font-bold text-slate-800 mb-4">
-            {editingId ? "비품 수정" : "비품 등록"}
+            {editingId ? t("admin.equipment.editTitle") : t("admin.equipment.registerTitle")}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  비품명 <span className="text-red-500">*</span>
+                  {t("admin.equipment.nameLabel")} <span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="text"
@@ -236,28 +248,21 @@ export default function AdminEquipmentPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="비품명을 입력하세요"
+                  placeholder={t("admin.equipment.namePlaceholder")}
                   required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  카테고리 <span className="text-red-500">*</span>
+                  {t("admin.equipment.categoryLabel")} <span className="text-red-500">*</span>
                 </label>
                 <SelectCustom
                   value={formData.category}
                   onValueChange={(value) =>
                     setFormData({ ...formData, category: value })
                   }
-                  options={[
-                    { value: "laptop", label: "노트북" },
-                    { value: "monitor", label: "모니터" },
-                    { value: "peripherals", label: "주변기기" },
-                    { value: "office_supplies", label: "사무용품" },
-                    { value: "furniture", label: "가구" },
-                    { value: "others", label: "기타" },
-                  ]}
-                  placeholder="카테고리를 선택하세요"
+                  options={categoryOptions}
+                  placeholder={t("admin.equipment.categoryPlaceholder")}
                   required
                 />
               </div>
@@ -265,14 +270,14 @@ export default function AdminEquipmentPage() {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                설명
+                {t("admin.equipment.descriptionLabel")}
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                placeholder="설명을 입력하세요"
+                placeholder={t("admin.equipment.descriptionPlaceholder")}
                 className="w-full border border-slate-300 rounded p-2 text-sm"
                 rows={3}
               />
@@ -280,7 +285,7 @@ export default function AdminEquipmentPage() {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                이미지 (5MB 이하만 가능)
+                {t("admin.equipment.imageLabel")}
               </label>
               <ImageUpload
                 onChange={(file) =>
@@ -293,7 +298,7 @@ export default function AdminEquipmentPage() {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  재고
+                  {t("admin.equipment.stockLabel")}
                 </label>
                 <Input
                   type="number"
@@ -309,7 +314,7 @@ export default function AdminEquipmentPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  신청 가능 여부
+                  {t("admin.equipment.availabilityLabel")}
                 </label>
                 <SelectCustom
                   value={formData.available ? "true" : "false"}
@@ -320,11 +325,11 @@ export default function AdminEquipmentPage() {
                     })
                   }
                   options={[
-                    { value: "true", label: "가능" },
-                    { value: "false", label: "불가" },
+                    { value: "true", label: t("equipment.available") },
+                    { value: "false", label: t("equipment.unavailable") },
                   ]}
-                  placeholder="신청 가능 여부"
-                  label="신청 가능 여부"
+                  placeholder={t("admin.equipment.availabilityLabel")}
+                  label={t("admin.equipment.availabilityLabel")}
                 />
               </div>
             </div>
@@ -334,14 +339,14 @@ export default function AdminEquipmentPage() {
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
-                {editingId ? "수정" : "등록"}
+                {editingId ? t("common.edit") : t("common.submit")}
               </Button>
               <Button
                 type="button"
                 onClick={handleCloseForm}
                 className="bg-slate-200 hover:bg-slate-300 text-slate-700"
               >
-                취소
+                {t("common.cancel")}
               </Button>
             </div>
           </form>
@@ -355,22 +360,22 @@ export default function AdminEquipmentPage() {
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-700">
-                  이미지
+                  {t("admin.equipment.imageColumn")}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-700">
-                  비품명
+                  {t("admin.equipment.nameColumn")}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-700">
-                  카테고리
+                  {t("admin.equipment.categoryColumn")}
                 </th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-700">
-                  재고
+                  {t("admin.equipment.stockColumn")}
                 </th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-700">
-                  상태
+                  {t("admin.equipment.statusColumn")}
                 </th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-700">
-                  관리
+                  {t("admin.equipment.actionColumn")}
                 </th>
               </tr>
             </thead>
@@ -394,7 +399,7 @@ export default function AdminEquipmentPage() {
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded">
-                      {equipment.category}
+                      {t(`admin.equipment.categories.${equipment.category}`)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center">
@@ -418,7 +423,7 @@ export default function AdminEquipmentPage() {
                           : "bg-red-100 text-red-700"
                       }`}
                     >
-                      {equipment.available ? "사용 가능" : "사용 불가"}
+                      {equipment.available ? t("admin.equipment.statusAvailable") : t("admin.equipment.statusUnavailable")}
                     </span>
                   </td>
                   <td className="px-4 py-3">
@@ -427,14 +432,14 @@ export default function AdminEquipmentPage() {
                         onClick={() => handleOpenForm(equipment)}
                         className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1"
                       >
-                        수정
+                        {t("common.edit")}
                       </Button>
                       <ConfirmButton
-                        buttonTitle="삭제"
+                        buttonTitle={t("common.delete")}
                         buttonClassName="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1"
-                        alertTitle="비품을 삭제하시겠습니까?"
-                        alertDescription="이 작업은 되돌릴 수 없습니다."
-                        confirmText="삭제"
+                        alertTitle={t("admin.equipment.deleteConfirm")}
+                        alertDescription={t("admin.equipment.deleteWarning")}
+                        confirmText={t("common.delete")}
                         onConfirm={() => handleDelete(equipment.id)}
                       />
                     </div>
@@ -447,7 +452,7 @@ export default function AdminEquipmentPage() {
 
         {equipments.length === 0 && (
           <div className="p-12 text-center text-slate-500">
-            등록된 비품이 없습니다.
+            {t("equipment.noEquipment")}
           </div>
         )}
       </div>
