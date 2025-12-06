@@ -6,6 +6,8 @@ import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
+import { Globe } from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -15,6 +17,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "ko" ? "ja" : "ko";
+    i18n.changeLanguage(newLang);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +82,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="rounded"
-              placeholder="user@test.com"
+              placeholder="user@test.com / admin@test.com"
               required
             />
           </div>
@@ -88,7 +95,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="rounded"
-              placeholder="••••••••"
+              placeholder="user : 1111 / admin : 1111"
               required
             />
           </div>
@@ -108,11 +115,24 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <div className="mt-8 pt-4 border-t text-xs text-slate-400 text-center">
+        {/* 언어 전환 버튼 */}
+        <div className="flex flex-col items-center mt-2">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-1 text-slate-700 hover:text-blue-500 transition"
+            title={t(`language.${i18n.language === "ko" ? "ja" : "ko"}`)}
+          >
+            <Globe size={16} />
+            <span className="text-xs">
+              {i18n.language === "ko" ? "日本語" : "한국어"}
+            </span>
+          </button>
+        </div>
+
+        <div className="mt-4 pt-4 border-t text-xs text-slate-400 text-center">
           {t("auth.authorizedOnly")}
         </div>
       </div>
     </div>
   );
 }
-

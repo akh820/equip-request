@@ -35,11 +35,8 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 h-14 flex justify-between items-center">
         <Link
           to="/equipment"
-          className="flex items-center gap-3 hover:opacity-90"
+          className="ml-3 flex items-center gap-3 hover:opacity-90"
         >
-          <div className="w-8 h-8 bg-white text-slate-800 rounded flex items-center justify-center font-bold">
-            EQ
-          </div>
           <span className="font-bold text-lg tracking-tight">
             {t("header.systemName")}
           </span>
@@ -71,7 +68,9 @@ export default function Header() {
             title={t(`language.${i18n.language === "ko" ? "ja" : "ko"}`)}
           >
             <Globe size={16} />
-            <span className="text-xs">{i18n.language === "ko" ? "日本語" : "한국어"}</span>
+            <span className="text-xs">
+              {i18n.language === "ko" ? "日本語" : "한국어"}
+            </span>
           </button>
 
           <div className="w-px h-4 bg-slate-600"></div>
@@ -125,4 +124,3 @@ export default function Header() {
     </header>
   );
 }
-
