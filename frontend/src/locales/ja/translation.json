@@ -173,5 +173,11 @@
   "language": {
     "ko": "한국어",
     "ja": "日本語"
+  },
+  "imageUpload": {
+    "selectFile": "ファイル選択",
+    "noFileSelected": "選択されたファイルなし",
+    "fileSizeError": "ファイルサイズは5MBを超えることはできません。",
+    "imageOnlyError": "画像ファイルのみアップロード可能です。"
   }
 }

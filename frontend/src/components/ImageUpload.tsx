@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface ImageUploadProps {
   onChange: (file: File | null) => void;
@@ -13,21 +13,25 @@ export default function ImageUpload({
   onChange,
   initialPreview,
 }: ImageUploadProps) {
+  const { t } = useTranslation();
   const [preview, setPreview] = useState<string>(initialPreview || "");
+  const [fileName, setFileName] = useState<string>("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("파일 크기는 5MB를 초과할 수 없습니다.");
+      toast.error(t("imageUpload.fileSizeError"));
       return;
     }
 
     if (!file.type.startsWith("image/")) {
-      toast.error("이미지 파일만 업로드 가능합니다.");
+      toast.error(t("imageUpload.imageOnlyError"));
       return;
     }
+
+    setFileName(file.name);
 
     // 로컬 미리보기 생성 (Blob URL)
     const reader = new FileReader();
@@ -42,6 +46,7 @@ export default function ImageUpload({
 
   const handleRemove = () => {
     setPreview("");
+    setFileName("");
     onChange(null);
   };
 
@@ -49,12 +54,20 @@ export default function ImageUpload({
     <div className="space-y-2">
       <div className="flex items-center gap-2">
         {!preview && (
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="flex-1"
-          />
+          <label className="flex items-center gap-2 cursor-pointer">
+            <span className="px-4 py-2 bg-neutral-100 border border-neutral-200 rounded-sm text-sm text-neutral-700 hover:bg-neutral-200 transition">
+              {t("imageUpload.selectFile")}
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <span className="text-sm text-neutral-500">
+              {fileName || t("imageUpload.noFileSelected")}
+            </span>
+          </label>
         )}
       </div>
 
@@ -63,13 +76,13 @@ export default function ImageUpload({
           <img
             src={preview}
             alt="Preview"
-            className="w-48 h-48 object-cover border border-slate-300 rounded"
+            className="w-48 h-48 object-cover rounded-sm border border-neutral-200"
           />
           <Button
             type="button"
             variant="destructive"
             size="sm"
-            className="absolute top-2 right-2"
+            className="absolute top-2 right-2 rounded"
             onClick={handleRemove}
           >
             <X className="w-4 h-4" />
