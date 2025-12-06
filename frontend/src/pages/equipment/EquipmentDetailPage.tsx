@@ -41,9 +41,7 @@ export default function EquipmentDetailPage() {
         setEquipment(response.data);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
-          setError(
-            err.response?.data?.message || t("equipment.failedToLoad")
-          );
+          setError(err.response?.data?.message || t("equipment.failedToLoad"));
         } else {
           setError(t("auth.unknownError"));
         }
@@ -132,7 +130,9 @@ export default function EquipmentDetailPage() {
 
             <div className="border-t border-neutral-200 pt-4 mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-neutral-500">{t("equipment.stock")}</span>
+                <span className="text-sm text-neutral-500">
+                  {t("equipment.stock")}
+                </span>
                 <span
                   className={`text-lg font-semibold ${
                     equipment.stock === 0
@@ -147,13 +147,17 @@ export default function EquipmentDetailPage() {
               </div>
 
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-neutral-500">{t("equipment.availabilityLabel")}</span>
+                <span className="text-sm text-neutral-500">
+                  {t("equipment.availabilityLabel")}
+                </span>
                 <span
                   className={`text-sm font-medium ${
                     equipment.available ? "text-emerald-600" : "text-rose-500"
                   }`}
                 >
-                  {equipment.available ? t("equipment.available") : t("equipment.unavailable")}
+                  {equipment.available
+                    ? t("equipment.available")
+                    : t("equipment.unavailable")}
                 </span>
               </div>
             </div>
@@ -166,7 +170,7 @@ export default function EquipmentDetailPage() {
                 <div className="flex items-center gap-3">
                   <Button
                     onClick={() => handleQuantityChange(quantity - 1)}
-                    className="w-10 h-10 border bg-white border-neutral-200 hover:bg-neutral-50 text-neutral-700 font-medium"
+                    className="w-10 h-10 rounded border bg-white border-neutral-200 hover:bg-neutral-50 text-neutral-700 font-medium"
                   >
                     -
                   </Button>
@@ -176,7 +180,7 @@ export default function EquipmentDetailPage() {
                     onChange={(e) =>
                       handleQuantityChange(parseInt(e.target.value) || 1)
                     }
-                    className="w-20 h-10 rounded-sm border border-neutral-200 text-center"
+                    className="w-20 h-10 rounded border border-neutral-200 text-center"
                     min="1"
                     max={equipment.stock}
                   />
@@ -195,7 +199,7 @@ export default function EquipmentDetailPage() {
                 <Button
                   onClick={handleAddToCart}
                   disabled={!equipment.available || equipment.stock === 0}
-                  className="w-full py-5 bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-5 rounded bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {equipment.stock === 0
                     ? t("equipment.outOfStock")
@@ -218,4 +222,3 @@ export default function EquipmentDetailPage() {
     </div>
   );
 }
-
