@@ -1,10 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
-import { ShoppingCart, LogOut } from "lucide-react";
+import { ShoppingCart, LogOut, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const { user, isAuthenticated, logout } = useAuthStore();
   const { items } = useCartStore();
 
@@ -14,6 +16,11 @@ export default function Header() {
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "ko" ? "ja" : "ko";
+    i18n.changeLanguage(newLang);
   };
 
   const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -34,29 +41,41 @@ export default function Header() {
             EQ
           </div>
           <span className="font-bold text-lg tracking-tight">
-            사내비품관리시스템
+            {t("header.systemName")}
           </span>
         </Link>
 
         <nav className="hidden md:flex h-full">
           <NavLink to="/equipment" className={getNavLinkClass}>
-            비품목록
+            {t("header.equipmentList")}
           </NavLink>
 
           {isAuthenticated && !isAdmin && (
             <NavLink to="/my-requests" className={getNavLinkClass}>
-              신청내역
+              {t("header.myRequests")}
             </NavLink>
           )}
 
           {isAdmin && (
             <NavLink to="/admin" className={getNavLinkClass}>
-              관리자
+              {t("header.admin")}
             </NavLink>
           )}
         </nav>
 
         <div className="flex items-center gap-4 text-sm">
+          {/* 언어 전환 버튼 */}
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-1 text-slate-300 hover:text-white transition"
+            title={t(`language.${i18n.language === "ko" ? "ja" : "ko"}`)}
+          >
+            <Globe size={16} />
+            <span className="text-xs">{i18n.language === "ko" ? "日本語" : "한국어"}</span>
+          </button>
+
+          <div className="w-px h-4 bg-slate-600"></div>
+
           {isAuthenticated ? (
             <>
               {!isAdmin && (
@@ -70,7 +89,7 @@ export default function Header() {
                     }
                   >
                     <ShoppingCart size={16} />
-                    <span>장바구니</span>
+                    <span>{t("header.cart")}</span>
                     {cartCount > 0 && (
                       <span className="bg-blue-600 text-white text-xs px-1.5 rounded-full min-w-[20px] text-center">
                         {cartCount}
@@ -89,7 +108,7 @@ export default function Header() {
                   className="text-slate-400 hover:text-white text-xs border border-slate-500 px-2 py-0.5 rounded flex items-center gap-1 transition"
                 >
                   <LogOut size={12} />
-                  로그아웃
+                  {t("common.logout")}
                 </button>
               </div>
             </>
@@ -98,7 +117,7 @@ export default function Header() {
               to="/login"
               className="text-slate-300 hover:text-white border border-slate-500 px-3 py-1 rounded transition"
             >
-              로그인
+              {t("common.login")}
             </Link>
           )}
         </div>
@@ -106,3 +125,4 @@ export default function Header() {
     </header>
   );
 }
+

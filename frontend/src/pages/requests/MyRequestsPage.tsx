@@ -5,6 +5,7 @@ import api from "@/lib/api";
 import axios from "axios";
 import Loading from "@/common/Loading";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface RequestItem {
   id: number;
@@ -26,6 +27,7 @@ interface Request {
 
 export default function MyRequestsPage() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const { user } = useAuthStore();
   const [requests, setRequests] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,11 +46,10 @@ export default function MyRequestsPage() {
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
           setError(
-            err.response?.data?.message ||
-              "신청 내역을 불러오는데 실패했습니다."
+            err.response?.data?.message || t("requests.failedToLoad")
           );
         } else {
-          setError("알 수 없는 오류가 발생했습니다.");
+          setError(t("auth.unknownError"));
         }
       } finally {
         setLoading(false);
@@ -56,26 +57,26 @@ export default function MyRequestsPage() {
     };
 
     fetchRequests();
-  }, [user, navigate]);
+  }, [user, navigate, t]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "PENDING":
         return (
           <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">
-            대기 중
+            {t("requests.status.pending")}
           </span>
         );
       case "APPROVED":
         return (
           <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-            승인됨
+            {t("requests.status.approved")}
           </span>
         );
       case "REJECTED":
         return (
           <span className="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full">
-            반려됨
+            {t("requests.status.rejected")}
           </span>
         );
       default:
@@ -89,7 +90,7 @@ export default function MyRequestsPage() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("ko-KR", {
+    return date.toLocaleDateString(i18n.language === "ja" ? "ja-JP" : "ko-KR", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -113,18 +114,18 @@ export default function MyRequestsPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-800">내 신청 내역</h2>
-        <p className="text-sm text-slate-500 mt-1">My Requests</p>
+        <h2 className="text-lg font-bold text-slate-800">{t("requests.myTitle")}</h2>
+        <p className="text-sm text-slate-500 mt-1">{t("requests.mySubtitle")}</p>
       </div>
 
       {requests.length === 0 ? (
         <div className="bg-white border border-slate-300 rounded p-12 text-center text-slate-500">
-          <p className="mb-4">신청 내역이 없습니다.</p>
+          <p className="mb-4">{t("requests.noRequests")}</p>
           <Button
             onClick={() => navigate("/equipment")}
             className="bg-slate-700 hover:bg-slate-800 text-white"
           >
-            비품 목록 보기
+            {t("cart.viewEquipment")}
           </Button>
         </div>
       ) : (
@@ -140,22 +141,20 @@ export default function MyRequestsPage() {
                 key={request.id}
                 className="bg-white border border-slate-300 rounded shadow-sm overflow-hidden"
               >
-                {/* 헤더 */}
                 <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
                   <div className="flex items-center gap-4">
                     <span className="text-sm text-slate-600">
-                      신청일: {formatDate(request.createdAt)}
+                      {t("requests.requestDate")}: {formatDate(request.createdAt)}
                     </span>
                     {request.processedAt && (
                       <span className="text-sm text-slate-600">
-                        처리일: {formatDate(request.processedAt)}
+                        {t("requests.processedDate")}: {formatDate(request.processedAt)}
                       </span>
                     )}
                   </div>
                   {getStatusBadge(request.status)}
                 </div>
 
-                {/* 비품 목록 */}
                 <div className="p-4">
                   <div className="space-y-2">
                     {request.items.map((item) => (
@@ -167,17 +166,16 @@ export default function MyRequestsPage() {
                           {item.equipmentName}
                         </span>
                         <span className="text-slate-600">
-                          {item.quantity}개
+                          {t("equipment.stockCount", { count: item.quantity })}
                         </span>
                       </div>
                     ))}
                   </div>
 
-                  {/* 반려 사유 */}
                   {request.status === "REJECTED" && request.rejectReason && (
                     <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
                       <p className="text-xs text-red-600 font-medium mb-1">
-                        반려 사유
+                        {t("requests.rejectReason")}
                       </p>
                       <p className="text-sm text-red-700">
                         {request.rejectReason}
@@ -192,3 +190,4 @@ export default function MyRequestsPage() {
     </div>
   );
 }
+

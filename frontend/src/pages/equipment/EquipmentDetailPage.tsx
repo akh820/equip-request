@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Loading from "@/common/Loading";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 interface Equipment {
   id: number;
@@ -22,6 +23,7 @@ interface Equipment {
 
 export default function EquipmentDetailPage() {
   const { id } = useParams();
+  const { t } = useTranslation();
   const { addItem } = useCartStore();
   const { user } = useAuthStore();
 
@@ -40,11 +42,10 @@ export default function EquipmentDetailPage() {
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
           setError(
-            err.response?.data?.message ||
-              "비품 정보를 불러오는데 실패했습니다."
+            err.response?.data?.message || t("equipment.failedToLoad")
           );
         } else {
-          setError("알 수 없는 오류가 발생했습니다.");
+          setError(t("auth.unknownError"));
         }
       } finally {
         setLoading(false);
@@ -52,13 +53,13 @@ export default function EquipmentDetailPage() {
     };
 
     fetchEquipment();
-  }, [id]);
+  }, [id, t]);
 
   const handleAddToCart = () => {
     if (!equipment) return;
 
     if (quantity > equipment.stock) {
-      toast.error("재고가 부족합니다.");
+      toast.error(t("equipment.stockInsufficient"));
       return;
     }
 
@@ -70,13 +71,13 @@ export default function EquipmentDetailPage() {
       stock: equipment.stock,
     });
 
-    toast.success("장바구니에 추가되었습니다!");
+    toast.success(t("equipment.addedToCart"));
   };
 
   const handleQuantityChange = (value: number) => {
     if (value < 1) return;
     if (equipment && value > equipment.stock) {
-      toast.error("재고가 부족합니다.");
+      toast.error(t("equipment.stockInsufficient"));
       return;
     }
     setQuantity(value);
@@ -90,13 +91,13 @@ export default function EquipmentDetailPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-6">
         <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700 mb-4">
-          {error || "비품을 찾을 수 없습니다."}
+          {error || t("equipment.notFound")}
         </div>
         <Link
           to="/equipment"
           className="px-4 py-2 border border-slate-300 text-slate-700 rounded text-sm hover:bg-slate-50 inline-block"
         >
-          ← 목록으로
+          {t("common.backToList")}
         </Link>
       </div>
     );
@@ -106,7 +107,6 @@ export default function EquipmentDetailPage() {
     <div className="max-w-4xl mx-auto px-4 py-6">
       <div className="bg-white border border-slate-300 rounded shadow-sm overflow-hidden">
         <div className="grid md:grid-cols-2 gap-6 p-6">
-          {/* 이미지 */}
           <div className="bg-slate-100 rounded overflow-hidden">
             <img
               src={equipment.imageUrl}
@@ -115,7 +115,6 @@ export default function EquipmentDetailPage() {
             />
           </div>
 
-          {/* 정보 */}
           <div className="flex flex-col">
             <div className="mb-2">
               <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
@@ -133,7 +132,7 @@ export default function EquipmentDetailPage() {
 
             <div className="border-t border-slate-200 pt-4 mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-500">재고</span>
+                <span className="text-sm text-slate-500">{t("equipment.stock")}</span>
                 <span
                   className={`text-lg font-semibold ${
                     equipment.stock === 0
@@ -143,27 +142,26 @@ export default function EquipmentDetailPage() {
                       : "text-green-600"
                   }`}
                 >
-                  {equipment.stock}개
+                  {t("equipment.stockCount", { count: equipment.stock })}
                 </span>
               </div>
 
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-500">신청 가능 여부</span>
+                <span className="text-sm text-slate-500">{t("equipment.availabilityLabel")}</span>
                 <span
                   className={`text-sm font-medium ${
                     equipment.available ? "text-green-600" : "text-red-600"
                   }`}
                 >
-                  {equipment.available ? "가능" : "불가"}
+                  {equipment.available ? t("equipment.available") : t("equipment.unavailable")}
                 </span>
               </div>
             </div>
 
-            {/* 수량 선택 (관리자는 숨김) */}
             {!isAdmin && equipment.available && equipment.stock > 0 && (
               <div className="mb-6">
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  수량
+                  {t("equipment.quantity")}
                 </label>
                 <div className="flex items-center gap-3">
                   <Button
@@ -192,7 +190,6 @@ export default function EquipmentDetailPage() {
               </div>
             )}
 
-            {/* 버튼 */}
             <div className="mt-auto space-y-3">
               {!isAdmin && (
                 <Button
@@ -201,10 +198,10 @@ export default function EquipmentDetailPage() {
                   className="w-full py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {equipment.stock === 0
-                    ? "재고 없음"
+                    ? t("equipment.outOfStock")
                     : !equipment.available
-                    ? "신청 불가"
-                    : "장바구니 담기"}
+                    ? t("equipment.notAvailable")
+                    : t("equipment.addToCart")}
                 </Button>
               )}
 
@@ -212,7 +209,7 @@ export default function EquipmentDetailPage() {
                 to="/equipment"
                 className="block text-center px-4 py-2.5 border border-slate-300 text-slate-700 rounded hover:bg-slate-50"
               >
-                ← 목록으로
+                {t("common.backToList")}
               </Link>
             </div>
           </div>
@@ -221,3 +218,4 @@ export default function EquipmentDetailPage() {
     </div>
   );
 }
+

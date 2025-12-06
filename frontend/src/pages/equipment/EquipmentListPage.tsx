@@ -6,6 +6,7 @@ import { RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Virtuoso } from "react-virtuoso";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 interface Equipment {
   id: number;
@@ -20,6 +21,7 @@ interface Equipment {
 
 export default function EquipmentListPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchKeyword, setSearchKeyword] = useState("");
 
   const {
@@ -34,14 +36,12 @@ export default function EquipmentListPage() {
     },
   });
 
-  // 클라이언트 사이드 필터링
   const filteredEquipments = searchKeyword.trim()
     ? allEquipments.filter((equipment) =>
         equipment.name.toLowerCase().includes(searchKeyword.toLowerCase())
       )
     : allEquipments;
 
-  // Virtual Scroll을 위해 행 단위로 그룹화 (한 행에 3개씩)
   const equipmentRows = useMemo(() => {
     const itemsPerRow = 3;
     const rows: Equipment[][] = [];
@@ -59,19 +59,17 @@ export default function EquipmentListPage() {
     navigate(`/equipment/${id}`);
   };
 
-  // 로딩 중일 때
   if (isLoading) {
     return <Loading />;
   }
 
-  // 에러 발생 시
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700">
           {error instanceof Error
             ? error.message
-            : "비품 목록을 불러오는데 실패했습니다."}
+            : t("equipment.failedToLoad")}
         </div>
       </div>
     );
@@ -81,11 +79,10 @@ export default function EquipmentListPage() {
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
         <div className="">
-          <h2 className="text-lg font-bold text-slate-800">비품 목록</h2>
-          <p className="text-sm text-slate-500 mt-1">Equipment List</p>
+          <h2 className="text-lg font-bold text-slate-800">{t("equipment.title")}</h2>
+          <p className="text-sm text-slate-500 mt-1">{t("equipment.subtitle")}</p>
         </div>
 
-        {/* 검색 */}
         <div className="flex items-center">
           <div className="relative max-w-md">
             <Search
@@ -96,7 +93,7 @@ export default function EquipmentListPage() {
               type="text"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
-              placeholder="비품 이름으로 검색..."
+              placeholder={t("equipment.searchPlaceholder")}
               className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
             />
           </div>
@@ -117,8 +114,8 @@ export default function EquipmentListPage() {
         <div className="bg-white border border-slate-300 rounded p-12 text-center text-slate-500">
           <p>
             {searchKeyword
-              ? `"${searchKeyword}"에 대한 검색 결과가 없습니다.`
-              : "등록된 비품이 없습니다."}
+              ? t("equipment.noResults", { keyword: searchKeyword })
+              : t("equipment.noEquipment")}
           </p>
         </div>
       ) : (
@@ -150,7 +147,7 @@ export default function EquipmentListPage() {
                       </span>
                       {!equipment.available && (
                         <span className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded">
-                          신청 불가
+                          {t("equipment.notAvailable")}
                         </span>
                       )}
                     </div>
@@ -161,7 +158,7 @@ export default function EquipmentListPage() {
                       {equipment.description}
                     </p>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-500">재고</span>
+                      <span className="text-slate-500">{t("equipment.stock")}</span>
                       <span
                         className={`font-semibold ${
                           equipment.stock === 0
@@ -171,7 +168,7 @@ export default function EquipmentListPage() {
                             : "text-green-600"
                         }`}
                       >
-                        {equipment.stock}개
+                        {t("equipment.stockCount", { count: equipment.stock })}
                       </span>
                     </div>
                   </div>
@@ -184,3 +181,4 @@ export default function EquipmentListPage() {
     </div>
   );
 }
+

@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { setAuth } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +17,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    // 브라우저는 submit 버튼을 누르면 무조건 페이지를 새로고침하여서버로 데이터를 보내려 하기때문에 방지용
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -35,13 +36,12 @@ export default function LoginPage() {
 
       navigate("/equipment");
     } catch (err: unknown) {
-      //TypeGuard 사용해서 axiosError로 타입 좁히기
       if (axios.isAxiosError(err)) {
         const errorMessage =
-          err.response?.data?.message || "로그인에 실패했습니다.";
+          err.response?.data?.message || t("auth.loginFailed");
         setError(errorMessage);
       } else {
-        setError("알 수 없는 오류가 발생했습니다.");
+        setError(t("auth.unknownError"));
       }
       setLoading(false);
     } finally {
@@ -53,10 +53,10 @@ export default function LoginPage() {
     <div className="flex-1 flex items-center justify-center bg-slate-200 p-4 min-h-screen">
       <div className="bg-white p-8 rounded border border-slate-300 shadow-sm max-w-md w-full">
         <h2 className="text-xl font-bold mb-1 text-slate-800 text-center">
-          사내 비품 관리 시스템
+          {t("auth.loginTitle")}
         </h2>
         <p className="text-slate-500 mb-8 text-sm text-center">
-          Internal Equipment Management System
+          {t("auth.loginSubtitle")}
         </p>
 
         {error && (
@@ -68,7 +68,7 @@ export default function LoginPage() {
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              이메일
+              {t("common.email")}
             </label>
             <Input
               type="email"
@@ -81,7 +81,7 @@ export default function LoginPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              비밀번호
+              {t("common.password")}
             </label>
             <Input
               type="password"
@@ -97,21 +97,22 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full my-5 py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "로그인 중..." : "로그인"}
+            {loading ? t("auth.loggingIn") : t("auth.loginButton")}
           </Button>
         </form>
 
         <div className="mt-6 text-center text-sm text-slate-500">
-          계정이 없으신가요?{" "}
+          {t("auth.noAccount")}{" "}
           <Link to="/signup" className="text-blue-600 hover:underline">
-            회원가입
+            {t("common.signup")}
           </Link>
         </div>
 
         <div className="mt-8 pt-4 border-t text-xs text-slate-400 text-center">
-          Authorized Personnel Only
+          {t("auth.authorizedOnly")}
         </div>
       </div>
     </div>
   );
 }
+

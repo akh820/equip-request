@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import i18n from "@/lib/i18n";
 
 import { RouterProvider } from "react-router";
 import router from "./router/index.tsx";
@@ -18,11 +19,16 @@ const queryClient = new QueryClient({
   },
 });
 
+document.title = i18n.t("meta.title");
+
+i18n.on("languageChanged", () => {
+  document.title = i18n.t("meta.title");
+});
+
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <RouterProvider router={router} />
     <Toaster position="top-center" richColors closeButton duration={3000} />
-    {/* 개발 도구 - 프로덕션에서는 자동으로 제외됨 */}
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
 );

@@ -3,29 +3,31 @@ import { useNavigate, Link } from "react-router";
 import { useAuthStore } from "@/stores/authStore";
 import { toast } from "sonner";
 import { ClipboardList, Package } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function AdminPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user } = useAuthStore();
 
   useEffect(() => {
     if (user?.role !== "ADMIN") {
-      toast.error("관리자만 접근 가능합니다.");
+      toast.error(t("admin.accessDenied"));
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, t]);
 
   const menuItems = [
     {
-      title: "신청 관리",
-      description: "비품 신청 승인/반려 처리",
+      title: t("admin.requestManagement"),
+      description: t("admin.requestManagementDesc"),
       path: "/admin/requests",
       icon: ClipboardList,
       color: "blue",
     },
     {
-      title: "비품 관리",
-      description: "비품 등록 및 재고 관리",
+      title: t("admin.equipmentManagement"),
+      description: t("admin.equipmentManagementDesc"),
       path: "/admin/equipment",
       icon: Package,
       color: "blue",
@@ -35,8 +37,8 @@ export default function AdminPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-800">관리자 페이지</h2>
-        <p className="text-sm text-slate-500 mt-1">Admin Dashboard</p>
+        <h2 className="text-lg font-bold text-slate-800">{t("admin.title")}</h2>
+        <p className="text-sm text-slate-500 mt-1">{t("admin.subtitle")}</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -72,3 +74,4 @@ export default function AdminPage() {
     </div>
   );
 }
+
