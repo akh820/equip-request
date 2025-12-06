@@ -123,7 +123,7 @@ export default function MyRequestsPage() {
           <p className="mb-4">{t("requests.noRequests")}</p>
           <Button
             onClick={() => navigate("/equipment")}
-            className="bg-neutral-700 hover:bg-neutral-800 text-white"
+            className="rounded bg-neutral-700 hover:bg-neutral-800 text-white"
           >
             {t("cart.viewEquipment")}
           </Button>
@@ -173,7 +173,7 @@ export default function MyRequestsPage() {
                   </div>
 
                   {request.status === "REJECTED" && request.rejectReason && (
-                    <div className="mt-4 p-3 bg-red-100 border border-red -200 rounded">
+                    <div className="mt-4 p-3 bg-neutral-50 border border-red -200 rounded">
                       <p className="text-xs text-red-600 font-medium mb-1">
                         {t("requests.rejectReason")}
                       </p>

@@ -154,7 +154,7 @@ export default function EquipmentListPage() {
 
                       {isUnavailable && (
                         <div className="absolute inset-0 flex items-center justify-center z-10 p-4">
-                          <div className="border-red-500/100 border text-red-500 px-4 py-2 font-bold text-sm shadow-md backdrop-blur-sm">
+                          <div className="rounded border-red-500/100 border text-red-500 px-4 py-2 font-bold text-sm shadow-md backdrop-blur-sm">
                             {unavailableReason}
                           </div>
                         </div>

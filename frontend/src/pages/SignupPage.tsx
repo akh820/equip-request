@@ -97,7 +97,7 @@ export default function SignupPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full my-5 py-5 bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded my-5 py-5 bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? t("auth.signingUp") : t("auth.signupButton")}
           </Button>
@@ -105,7 +105,7 @@ export default function SignupPage() {
 
         <div className="mt-6 text-center text-sm text-neutral-500">
           {t("auth.hasAccount")}{" "}
-          <Link to="/login" className="text-neutral-700 hover:underline hover:text-blue-500 font-medium transition">
+          <Link to="/login" className="text-blue-500 hover:underline hover:text-blue-600 font-medium transition">
             {t("common.login")}
           </Link>
         </div>

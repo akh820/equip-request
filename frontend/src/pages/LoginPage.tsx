@@ -110,7 +110,7 @@ export default function LoginPage() {
 
         <div className="mt-6 text-center text-sm text-neutral-500">
           {t("auth.noAccount")}{" "}
-          <Link to="/signup" className="text-neutral-700 hover:underline hover:text-blue-500 font-medium transition">
+          <Link to="/signup" className="text-blue-500 hover:text-blue-600 hover:underline font-medium transition">
             {t("common.signup")}
           </Link>
         </div>
@@ -119,7 +119,7 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mt-2">
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-1 text-neutral-700 hover:text-blue-500 transition"
+            className="flex items-center gap-1 text-blue-500 hover:text-blue-600 transition"
             title={t(`language.${i18n.language === "ko" ? "ja" : "ko"}`)}
           >
             <Globe size={16} />
