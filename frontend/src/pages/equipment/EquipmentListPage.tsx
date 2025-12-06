@@ -66,7 +66,7 @@ export default function EquipmentListPage() {
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700">
+        <div className="bg-neutral-100 rounded-sm border border-neutral-200 p-4 text-neutral-700">
           {error instanceof Error ? error.message : t("equipment.failedToLoad")}
         </div>
       </div>
@@ -75,20 +75,20 @@ export default function EquipmentListPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="flex items-center justify-between bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
+      <div className="flex items-center justify-between bg-white p-4 rounded-sm border border-neutral-200 mb-6 shadow-sm">
         <div className="">
-          <h2 className="text-lg font-bold text-slate-800">
+          <h2 className="text-lg font-bold text-neutral-700">
             {t("equipment.title")}
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
-            {t("equipment.subtitle")}
+          <p className="text-sm text-neutral-500 mt-1">
+            {/* {t("equipment.subtitle")} */}
           </p>
         </div>
 
         <div className="flex items-center">
           <div className="relative max-w-md">
             <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"
               size={20}
             />
             <input
@@ -96,13 +96,13 @@ export default function EquipmentListPage() {
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
               placeholder={t("equipment.searchPlaceholder")}
-              className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2.5 rounded-sm border border-neutral-200  focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
             />
           </div>
           <div className="mx-2">
             <Button
               onClick={handleReset}
-              className="px-5 py-5 border"
+              className="px-5 py-5 border rounded"
               variant="outline"
               size="icon"
             >
@@ -113,7 +113,7 @@ export default function EquipmentListPage() {
       </div>
 
       {filteredEquipments.length === 0 ? (
-        <div className="bg-white border border-slate-300 rounded p-12 text-center text-slate-500">
+        <div className="bg-white rounded-sm border border-neutral-200 p-12 text-center text-neutral-500">
           <p>
             {searchKeyword
               ? t("equipment.noResults", { keyword: searchKeyword })
@@ -141,9 +141,9 @@ export default function EquipmentListPage() {
                   <div
                     key={equipment.id}
                     onClick={() => handleCardClick(equipment.id)}
-                    className="bg-white border border-slate-300 rounded shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden group"
+                    className="bg-white rounded-sm border border-neutral-200 rounded-sm shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden group"
                   >
-                    <div className="h-48 bg-slate-200 relative overflow-hidden">
+                    <div className="h-48 bg-neutral-200 relative overflow-hidden">
                       <img
                         src={equipment.imageUrl}
                         alt={equipment.name}
@@ -154,8 +154,7 @@ export default function EquipmentListPage() {
 
                       {isUnavailable && (
                         <div className="absolute inset-0 flex items-center justify-center z-10 p-4">
-                          {/* 라벨 디자인은 유지 */}
-                          <div className="bg-red-600/60 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-md backdrop-blur-sm">
+                          <div className="border-red-500/100 border text-red-500 px-4 py-2 font-bold text-sm shadow-md backdrop-blur-sm">
                             {unavailableReason}
                           </div>
                         </div>
@@ -163,34 +162,34 @@ export default function EquipmentListPage() {
                     </div>
                     <div className="p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                        <span className="text-xs text-neutral-500 bg-neutral-100 px-2 py-1 rounded">
                           {t(
                             `admin.equipment.categories.${equipment.category}`
                           )}
                         </span>
                         {!equipment.available && (
-                          <span className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded">
+                          <span className="text-xs text-rose-600 bg-rose-50 px-2 py-1 rounded-sm border border-rose-200">
                             {t("equipment.notAvailable")}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-base font-semibold text-slate-800 mb-2">
+                      <h3 className="text-base font-semibold text-neutral-700 mb-2">
                         {equipment.name}
                       </h3>
-                      <p className="text-sm text-slate-600 mb-3 line-clamp-2">
+                      <p className="text-sm text-neutral-600 mb-3 line-clamp-2">
                         {equipment.description}
                       </p>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-500">
+                        <span className="text-neutral-500">
                           {t("equipment.stock")}
                         </span>
                         <span
                           className={`font-semibold ${
                             equipment.stock === 0
-                              ? "text-red-600"
+                              ? "text-rose-500"
                               : equipment.stock < 5
-                              ? "text-orange-600"
-                              : "text-green-600"
+                              ? "text-amber-600"
+                              : "text-neutral-700"
                           }`}
                         >
                           {t("equipment.stockCount", {

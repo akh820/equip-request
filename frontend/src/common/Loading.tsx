@@ -21,7 +21,7 @@ export default function Loading({
     >
       <Loader2 className="text-gray-600 animate-spin mb-4" size={size} />
 
-      <p className="text-slate-500 text-sm font-medium animate-pulse">
+      <p className="text-neutral-500 text-sm font-medium animate-pulse">
         {message}
       </p>
     </div>

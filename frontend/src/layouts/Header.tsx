@@ -26,12 +26,12 @@ export default function Header() {
   const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
     `px-4 h-full flex items-center text-sm font-medium ${
       isActive
-        ? "bg-slate-700 text-white border-b-2 border-blue-400"
-        : "text-slate-300 hover:bg-slate-700 hover:text-white"
+        ? "bg-neutral-700 text-white border-b-2 border-neutral-400"
+        : "text-neutral-300 hover:bg-neutral-700 hover:text-white"
     }`;
 
   return (
-    <header className="bg-slate-800 text-white shadow-md sticky top-0 z-50">
+    <header className="bg-neutral-800 text-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 h-14 flex justify-between items-center">
         <Link
           to="/equipment"
@@ -64,7 +64,7 @@ export default function Header() {
           {/* 언어 전환 버튼 */}
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-1 text-slate-300 hover:text-white transition"
+            className="flex items-center gap-1 text-neutral-300 hover:text-white transition"
             title={t(`language.${i18n.language === "ko" ? "ja" : "ko"}`)}
           >
             <Globe size={16} />
@@ -73,7 +73,7 @@ export default function Header() {
             </span>
           </button>
 
-          <div className="w-px h-4 bg-slate-600"></div>
+          <div className="w-px h-4 bg-neutral-600"></div>
 
           {isAuthenticated ? (
             <>
@@ -83,28 +83,28 @@ export default function Header() {
                     to="/cart"
                     className={({ isActive }) =>
                       `flex items-center gap-1 transition ${
-                        isActive ? "text-blue-300" : "hover:text-blue-300"
+                        isActive ? "text-neutral-100" : "hover:text-neutral-100"
                       }`
                     }
                   >
                     <ShoppingCart size={16} />
                     <span>{t("header.cart")}</span>
                     {cartCount > 0 && (
-                      <span className="bg-blue-600 text-white text-xs px-1.5 rounded-full min-w-[20px] text-center">
+                      <span className="bg-neutral-600 text-white text-xs px-1.5  min-w-[20px] text-center">
                         {cartCount}
                       </span>
                     )}
                   </NavLink>
 
-                  <div className="w-px h-4 bg-slate-600"></div>
+                  <div className="w-px h-4 bg-neutral-600"></div>
                 </>
               )}
 
               <div className="flex items-center gap-2">
-                <span className="text-slate-200">{user?.name}</span>
+                <span className="text-neutral-200">{user?.name}</span>
                 <button
                   onClick={handleLogout}
-                  className="text-slate-400 hover:text-white text-xs border border-slate-500 px-2 py-0.5 rounded flex items-center gap-1 transition"
+                  className="text-neutral-400 hover:text-white text-xs rounded-sm border border-neutral-500 px-2 py-0.5 flex items-center gap-1 transition"
                 >
                   <LogOut size={12} />
                   {t("common.logout")}
@@ -114,7 +114,7 @@ export default function Header() {
           ) : (
             <Link
               to="/login"
-              className="text-slate-300 hover:text-white border border-slate-500 px-3 py-1 rounded transition"
+              className="text-neutral-300 hover:text-white rounded-sm border border-neutral-500 px-3 py-1 rounded-sm transition"
             >
               {t("common.login")}
             </Link>
@@ -124,3 +124,4 @@ export default function Header() {
     </header>
   );
 }
+

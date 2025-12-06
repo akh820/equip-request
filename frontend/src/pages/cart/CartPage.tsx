@@ -80,24 +80,24 @@ export default function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      <div className="bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-800">{t("cart.title")}</h2>
-        <p className="text-sm text-slate-500 mt-1">{t("cart.subtitle")}</p>
+      <div className="bg-white p-4 rounded-sm border border-neutral-200 mb-6 shadow-sm">
+        <h2 className="text-lg font-bold text-neutral-700">{t("cart.title")}</h2>
+        {/* <p className="text-sm text-neutral-500 mt-1">{t("cart.subtitle")}</p> */}
       </div>
 
       {items.length === 0 ? (
-        <div className="bg-white border border-slate-300 rounded p-12 text-center text-slate-500">
+        <div className="bg-white rounded-sm border border-neutral-200 p-12 text-center text-neutral-500">
           <p className="mb-4">{t("cart.empty")}</p>
           <Button
             onClick={() => navigate("/equipment")}
-            className="bg-slate-700 hover:bg-slate-800 text-white"
+            className="bg-neutral-700 hover:bg-neutral-800 text-white rounded"
           >
             {t("cart.viewEquipment")}
           </Button>
         </div>
       ) : (
-        <div className="bg-white border border-slate-300 rounded shadow-sm overflow-hidden">
-          <div className="grid grid-cols-12 gap-4 p-4 border-b border-slate-200 bg-slate-50 text-sm font-medium text-slate-700">
+        <div className="bg-white rounded-sm border border-neutral-200 shadow-sm overflow-hidden">
+          <div className="grid grid-cols-12 gap-4 p-4 border-b border-neutral-200 bg-neutral-50 text-sm font-medium text-neutral-700">
             <div className="col-span-5">{t("cart.equipmentColumn")}</div>
             <div className="col-span-3 text-center">{t("cart.quantityColumn")}</div>
             <div className="col-span-3 text-center">{t("cart.stockColumn")}</div>
@@ -114,9 +114,9 @@ export default function CartPage() {
                   <img
                     src={item.imageUrl}
                     alt={item.equipmentName}
-                    className="w-16 h-16 object-cover rounded border border-slate-200"
+                    className="w-16 h-16 object-cover rounded-sm border border-neutral-200"
                   />
-                  <span className="text-sm font-medium text-slate-800">
+                  <span className="text-sm font-medium text-neutral-700">
                     {item.equipmentName}
                   </span>
                 </div>
@@ -126,7 +126,7 @@ export default function CartPage() {
                     onClick={() =>
                       handleQuantityChange(item.equipmentId, item.quantity - 1)
                     }
-                    className="w-8 h-8 border bg-whiteborder-slate-300 rounded hover:bg-slate-50 text-slate-700"
+                    className="w-8 h-8 border bg-whiteborder-neutral-200 hover:bg-neutral-50 text-neutral-700"
                   >
                     -
                   </Button>
@@ -137,20 +137,20 @@ export default function CartPage() {
                     onClick={() =>
                       handleQuantityChange(item.equipmentId, item.quantity + 1)
                     }
-                    className="w-8 h-8 border bg-whiteborder-slate-300 rounded hover:bg-slate-50 text-slate-700"
+                    className="w-8 h-8 border bg-whiteborder-neutral-200 hover:bg-neutral-50 text-neutral-700"
                   >
                     +
                   </Button>
                 </div>
 
                 <div className="col-span-3 text-center">
-                  <span className="text-sm text-slate-500">{item.stock}</span>
+                  <span className="text-sm text-neutral-500">{item.stock}</span>
                 </div>
 
                 <div className="col-span-1 text-right">
                   <button
                     onClick={() => handleRemoveItem(item.equipmentId)}
-                    className="text-red-600 hover:text-red-700 text-sm cursor-pointer"
+                    className="text-rose-400 hover:text-rose-500 text-sm cursor-pointer"
                   >
                     {t("common.delete")}
                   </button>
@@ -159,19 +159,19 @@ export default function CartPage() {
             ))}
           </div>
 
-          <div className="p-4 border-t border-slate-200 bg-slate-50">
+          <div className="p-4 border-t border-neutral-200 bg-neutral-50">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-slate-600">
+              <span className="text-sm text-neutral-600">
                 {t("cart.totalItems", { count: items.length })}
               </span>
-              <span className="text-sm text-slate-600">
+              <span className="text-sm text-neutral-600">
                 {t("cart.totalQuantity", { count: items.reduce((sum, item) => sum + item.quantity, 0) })}
               </span>
             </div>
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition disabled:opacity-50"
+              className="w-full py-5 bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition disabled:opacity-50"
             >
               {loading ? t("cart.submitting") : t("cart.submitRequest")}
             </Button>

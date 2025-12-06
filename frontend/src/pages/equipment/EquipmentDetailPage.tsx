@@ -90,12 +90,12 @@ export default function EquipmentDetailPage() {
   if (error || !equipment) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-6">
-        <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700 mb-4">
+        <div className="bg-neutral-100 rounded-sm border border-neutral-200 p-4 text-neutral-700 mb-4">
           {error || t("equipment.notFound")}
         </div>
         <Link
           to="/equipment"
-          className="px-4 py-2 border border-slate-300 text-slate-700 rounded text-sm hover:bg-slate-50 inline-block"
+          className="px-4 py-2 rounded-sm border border-neutral-200 text-neutral-700 text-sm hover:bg-neutral-50 inline-block"
         >
           {t("common.backToList")}
         </Link>
@@ -105,9 +105,9 @@ export default function EquipmentDetailPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      <div className="bg-white border border-slate-300 rounded shadow-sm overflow-hidden">
+      <div className="bg-white rounded-sm border border-neutral-200 shadow-sm overflow-hidden">
         <div className="grid md:grid-cols-2 gap-6 p-6">
-          <div className="bg-slate-100 rounded overflow-hidden">
+          <div className="bg-neutral-100 overflow-hidden">
             <img
               src={equipment.imageUrl}
               alt={equipment.name}
@@ -117,29 +117,29 @@ export default function EquipmentDetailPage() {
 
           <div className="flex flex-col">
             <div className="mb-2">
-              <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+              <span className="text-xs text-neutral-500 bg-neutral-100 px-2 py-1 rounded">
                 {t(`admin.equipment.categories.${equipment.category}`)}
               </span>
             </div>
 
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">
+            <h2 className="text-2xl font-bold text-neutral-700 mb-4">
               {equipment.name}
             </h2>
 
-            <p className="text-slate-600 mb-6 whitespace-pre-line">
+            <p className="text-neutral-600 mb-6 whitespace-pre-line">
               {equipment.description}
             </p>
 
-            <div className="border-t border-slate-200 pt-4 mb-6">
+            <div className="border-t border-neutral-200 pt-4 mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-500">{t("equipment.stock")}</span>
+                <span className="text-sm text-neutral-500">{t("equipment.stock")}</span>
                 <span
                   className={`text-lg font-semibold ${
                     equipment.stock === 0
-                      ? "text-red-600"
+                      ? "text-rose-500"
                       : equipment.stock < 5
-                      ? "text-orange-600"
-                      : "text-green-600"
+                      ? "text-amber-600"
+                      : "text-neutral-700"
                   }`}
                 >
                   {t("equipment.stockCount", { count: equipment.stock })}
@@ -147,10 +147,10 @@ export default function EquipmentDetailPage() {
               </div>
 
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-500">{t("equipment.availabilityLabel")}</span>
+                <span className="text-sm text-neutral-500">{t("equipment.availabilityLabel")}</span>
                 <span
                   className={`text-sm font-medium ${
-                    equipment.available ? "text-green-600" : "text-red-600"
+                    equipment.available ? "text-emerald-600" : "text-rose-500"
                   }`}
                 >
                   {equipment.available ? t("equipment.available") : t("equipment.unavailable")}
@@ -160,13 +160,13 @@ export default function EquipmentDetailPage() {
 
             {!isAdmin && equipment.available && equipment.stock > 0 && (
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
                   {t("equipment.quantity")}
                 </label>
                 <div className="flex items-center gap-3">
                   <Button
                     onClick={() => handleQuantityChange(quantity - 1)}
-                    className="w-10 h-10 border bg-white border-slate-300 rounded hover:bg-slate-50 text-slate-700 font-medium"
+                    className="w-10 h-10 border bg-white border-neutral-200 hover:bg-neutral-50 text-neutral-700 font-medium"
                   >
                     -
                   </Button>
@@ -176,13 +176,13 @@ export default function EquipmentDetailPage() {
                     onChange={(e) =>
                       handleQuantityChange(parseInt(e.target.value) || 1)
                     }
-                    className="w-20 h-10 border border-slate-300 rounded text-center"
+                    className="w-20 h-10 rounded-sm border border-neutral-200 text-center"
                     min="1"
                     max={equipment.stock}
                   />
                   <Button
                     onClick={() => handleQuantityChange(quantity + 1)}
-                    className="w-10 h-10 border bg-white border-slate-300 rounded hover:bg-slate-50 text-slate-700 font-medium"
+                    className="w-10 h-10 border bg-white border-neutral-200 hover:bg-neutral-50 text-neutral-700 font-medium"
                   >
                     +
                   </Button>
@@ -195,7 +195,7 @@ export default function EquipmentDetailPage() {
                 <Button
                   onClick={handleAddToCart}
                   disabled={!equipment.available || equipment.stock === 0}
-                  className="w-full py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-5 bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {equipment.stock === 0
                     ? t("equipment.outOfStock")
@@ -207,7 +207,7 @@ export default function EquipmentDetailPage() {
 
               <Link
                 to="/equipment"
-                className="block text-center px-4 py-2.5 border border-slate-300 text-slate-700 rounded hover:bg-slate-50"
+                className="block text-center px-4 py-2.5 rounded-sm border border-neutral-200 text-neutral-700 hover:bg-neutral-50"
               >
                 {t("common.backToList")}
               </Link>

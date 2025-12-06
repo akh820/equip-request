@@ -202,7 +202,7 @@ export default function AdminEquipmentPage() {
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-red-50 border border-red-200 p-4 rounded text-red-700">
+        <div className="bg-neutral-100 rounded-sm border border-neutral-200 p-4 text-neutral-700">
           {error instanceof Error
             ? error.message
             : t("equipment.failedToLoad")}
@@ -213,18 +213,18 @@ export default function AdminEquipmentPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="bg-white p-4 border border-slate-300 rounded mb-6 shadow-sm flex items-center justify-between">
+      <div className="bg-white p-4 rounded-sm border border-neutral-200 mb-6 shadow-sm flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-800">
+          <h2 className="text-lg font-bold text-neutral-700">
             {t("admin.equipment.title")}
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
-            {t("admin.equipment.subtitle")}
+          <p className="text-sm text-neutral-500 mt-1">
+            {/* {t("admin.equipment.subtitle")} */}
           </p>
         </div>
         <Button
           onClick={() => handleOpenForm()}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="bg-neutral-700 hover:bg-neutral-800 text-white rounded"
         >
           {t("admin.equipment.register")}
         </Button>
@@ -232,15 +232,15 @@ export default function AdminEquipmentPage() {
 
       {/* 등록/수정 폼 */}
       {isFormOpen && (
-        <div className="bg-white border border-slate-300 rounded shadow-sm p-6 mb-6">
-          <h3 className="text-lg font-bold text-slate-800 mb-4">
+        <div className="bg-white rounded-sm border border-neutral-200 shadow-sm p-6 mb-6">
+          <h3 className="text-lg font-bold text-neutral-700 mb-4">
             {editingId ? t("admin.equipment.editTitle") : t("admin.equipment.registerTitle")}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("admin.equipment.nameLabel")} <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                {t("admin.equipment.nameLabel")} <span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="text"
@@ -253,8 +253,8 @@ export default function AdminEquipmentPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("admin.equipment.categoryLabel")} <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                {t("admin.equipment.categoryLabel")} <span className="text-red-500">*</span>
                 </label>
                 <SelectCustom
                   value={formData.category}
@@ -269,7 +269,7 @@ export default function AdminEquipmentPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 {t("admin.equipment.descriptionLabel")}
               </label>
               <textarea
@@ -278,13 +278,13 @@ export default function AdminEquipmentPage() {
                   setFormData({ ...formData, description: e.target.value })
                 }
                 placeholder={t("admin.equipment.descriptionPlaceholder")}
-                className="w-full border border-slate-300 rounded p-2 text-sm"
+                className="w-full rounded-sm border border-neutral-200 p-2 text-sm"
                 rows={3}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 {t("admin.equipment.imageLabel")}
               </label>
               <ImageUpload
@@ -297,7 +297,7 @@ export default function AdminEquipmentPage() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   {t("admin.equipment.stockLabel")}
                 </label>
                 <Input
@@ -313,7 +313,7 @@ export default function AdminEquipmentPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   {t("admin.equipment.availabilityLabel")}
                 </label>
                 <SelectCustom
@@ -337,14 +337,14 @@ export default function AdminEquipmentPage() {
             <div className="flex gap-2">
               <Button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-neutral-700 hover:bg-neutral-800 text-white rounded"
               >
                 {editingId ? t("common.edit") : t("common.submit")}
               </Button>
               <Button
                 type="button"
                 onClick={handleCloseForm}
-                className="bg-slate-200 hover:bg-slate-300 text-slate-700"
+                className="bg-neutral-200 hover:bg-neutral-300 text-neutral-700 rounded"
               >
                 {t("common.cancel")}
               </Button>
@@ -354,51 +354,51 @@ export default function AdminEquipmentPage() {
       )}
 
       {/* 비품 목록 */}
-      <div className="bg-white border border-slate-300 rounded shadow-sm overflow-hidden">
+      <div className="bg-white rounded-sm border border-neutral-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-neutral-50 border-b border-neutral-200">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-slate-700">
+                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700">
                   {t("admin.equipment.imageColumn")}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-slate-700">
+                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700">
                   {t("admin.equipment.nameColumn")}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-slate-700">
+                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700">
                   {t("admin.equipment.categoryColumn")}
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-slate-700">
+                <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700">
                   {t("admin.equipment.stockColumn")}
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-slate-700">
+                <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700">
                   {t("admin.equipment.statusColumn")}
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-slate-700">
+                <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700">
                   {t("admin.equipment.actionColumn")}
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
               {equipments.map((equipment) => (
-                <tr key={equipment.id} className="hover:bg-slate-50">
+                <tr key={equipment.id} className="hover:bg-neutral-50">
                   <td className="px-4 py-3">
                     <img
                       src={equipment.imageUrl}
                       alt={equipment.name}
-                      className="w-12 h-12 object-cover rounded border border-slate-200"
+                      className="w-12 h-12 object-cover rounded border border-neutral-200"
                     />
                   </td>
                   <td className="px-4 py-3">
-                    <div className="text-sm font-medium text-slate-800">
+                    <div className="text-sm font-medium text-neutral-700">
                       {equipment.name}
                     </div>
-                    <div className="text-xs text-slate-500 line-clamp-1">
+                    <div className="text-xs text-neutral-500 line-clamp-1">
                       {equipment.description}
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded">
+                    <span className="text-xs bg-neutral-100 text-neutral-700 px-2 py-1 rounded">
                       {t(`admin.equipment.categories.${equipment.category}`)}
                     </span>
                   </td>
@@ -406,10 +406,10 @@ export default function AdminEquipmentPage() {
                     <span
                       className={`text-sm font-medium ${
                         equipment.stock === 0
-                          ? "text-red-600"
+                          ? "text-rose-500"
                           : equipment.stock < 5
-                          ? "text-orange-600"
-                          : "text-green-600"
+                          ? "text-amber-600"
+                          : "text-neutral-700"
                       }`}
                     >
                       {equipment.stock}
@@ -417,10 +417,10 @@ export default function AdminEquipmentPage() {
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span
-                      className={`text-xs px-2 py-1 rounded-full ${
+                      className={`text-xs px-2 py-1 border ${
                         equipment.available
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
+                          ? "rounded bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : "rounded bg-red-100 text-red-600 border-red-200"
                       }`}
                     >
                       {equipment.available ? t("admin.equipment.statusAvailable") : t("admin.equipment.statusUnavailable")}
@@ -430,16 +430,17 @@ export default function AdminEquipmentPage() {
                     <div className="flex items-center justify-center gap-2">
                       <Button
                         onClick={() => handleOpenForm(equipment)}
-                        className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1"
+                        className="text-xs bg-neutral-700 hover:bg-neutral-800 text-white px-3 py-1 rounded"
                       >
                         {t("common.edit")}
                       </Button>
                       <ConfirmButton
                         buttonTitle={t("common.delete")}
-                        buttonClassName="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1"
+                        buttonClassName="text-xs bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded"
                         alertTitle={t("admin.equipment.deleteConfirm")}
                         alertDescription={t("admin.equipment.deleteWarning")}
                         confirmText={t("common.delete")}
+                        cancelText={t("common.cancel")}
                         onConfirm={() => handleDelete(equipment.id)}
                       />
                     </div>
@@ -451,7 +452,7 @@ export default function AdminEquipmentPage() {
         </div>
 
         {equipments.length === 0 && (
-          <div className="p-12 text-center text-slate-500">
+          <div className="p-12 text-center text-neutral-500">
             {t("equipment.noEquipment")}
           </div>
         )}

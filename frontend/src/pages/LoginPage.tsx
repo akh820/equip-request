@@ -57,24 +57,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center bg-slate-200 p-4 min-h-screen">
-      <div className="bg-white p-8 rounded border border-slate-300 shadow-sm max-w-md w-full">
-        <h2 className="text-xl font-bold mb-1 text-slate-800 text-center">
+    <div className="flex-1 flex items-center justify-center bg-neutral-200 p-4 min-h-screen">
+      <div className="bg-white p-8 rounded-sm border border-neutral-200 shadow-sm max-w-md w-full">
+        <h2 className="text-xl font-bold mb-1 text-neutral-700 text-center">
           {t("auth.loginTitle")}
         </h2>
-        <p className="text-slate-500 mb-8 text-sm text-center">
-          {t("auth.loginSubtitle")}
+        <p className="text-neutral-500 mb-8 text-sm text-center">
+          {/* {t("auth.loginSubtitle")} */}
         </p>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
+          <div className="mb-4 p-3 bg-red-100 border border-red-200 text-red-700 text-sm rounded">
             {error}
           </div>
         )}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               {t("common.email")}
             </label>
             <Input
@@ -87,7 +87,7 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               {t("common.password")}
             </label>
             <Input
@@ -102,15 +102,15 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full my-5 py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded w-full my-5 py-5 bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? t("auth.loggingIn") : t("auth.loginButton")}
           </Button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-slate-500">
+        <div className="mt-6 text-center text-sm text-neutral-500">
           {t("auth.noAccount")}{" "}
-          <Link to="/signup" className="text-blue-600 hover:underline">
+          <Link to="/signup" className="text-neutral-700 hover:underline hover:text-blue-500 font-medium transition">
             {t("common.signup")}
           </Link>
         </div>
@@ -119,7 +119,7 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mt-2">
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-1 text-slate-700 hover:text-blue-500 transition"
+            className="flex items-center gap-1 text-neutral-700 hover:text-blue-500 transition"
             title={t(`language.${i18n.language === "ko" ? "ja" : "ko"}`)}
           >
             <Globe size={16} />
@@ -129,7 +129,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="mt-4 pt-4 border-t text-xs text-slate-400 text-center">
+        <div className="mt-4 pt-4 border-t text-xs text-neutral-400 text-center">
           {t("auth.authorizedOnly")}
         </div>
       </div>

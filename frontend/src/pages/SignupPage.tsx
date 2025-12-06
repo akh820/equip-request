@@ -39,24 +39,24 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center bg-slate-200 p-4 min-h-screen">
-      <div className="bg-white p-8 rounded border border-slate-300 shadow-sm max-w-md w-full">
-        <h2 className="text-xl font-bold mb-1 text-slate-800 text-center">
+    <div className="flex-1 flex items-center justify-center bg-neutral-200 p-4 min-h-screen">
+      <div className="bg-white p-8 rounded-sm border border-neutral-200 shadow-sm max-w-md w-full">
+        <h2 className="text-xl font-bold mb-1 text-neutral-700 text-center">
           {t("auth.signupTitle")}
         </h2>
-        <p className="text-slate-500 mb-8 text-sm text-center">
-          {t("auth.signupSubtitle")}
+        <p className="text-neutral-500 mb-8 text-sm text-center">
+          {/* {t("auth.signupSubtitle")} */}
         </p>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
+          <div className="mb-4 p-3 bg-neutral-100 rounded-sm border border-neutral-200 text-neutral-700 text-sm rounded">
             {error}
           </div>
         )}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               {t("common.name")}
             </label>
             <Input
@@ -69,7 +69,7 @@ export default function SignupPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               {t("common.email")}
             </label>
             <Input
@@ -82,7 +82,7 @@ export default function SignupPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               {t("common.password")}
             </label>
             <Input
@@ -97,15 +97,15 @@ export default function SignupPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full my-5 py-5 bg-slate-700 hover:bg-slate-800 text-white rounded font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full my-5 py-5 bg-neutral-700 hover:bg-neutral-800 text-white font-medium transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? t("auth.signingUp") : t("auth.signupButton")}
           </Button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-slate-500">
+        <div className="mt-6 text-center text-sm text-neutral-500">
           {t("auth.hasAccount")}{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-neutral-700 hover:underline hover:text-blue-500 font-medium transition">
             {t("common.login")}
           </Link>
         </div>
