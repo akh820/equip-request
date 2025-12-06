@@ -6,19 +6,21 @@ import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import backend.domain.Equipment;
 import backend.service.EquipmentService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RestController
 @RequestMapping("/api/equipment")
@@ -51,13 +53,16 @@ public class EquipmentController {
         return ResponseEntity.ok(response);
     }
 
+    // TODO : 추후 파일 <-> DTO 따로 분리하여 결합도 낮추기
     @PostMapping
-    public ResponseEntity<CreateEquipmentResponse> create(@RequestBody CreateEquipmentRequest request) {
+    public ResponseEntity<CreateEquipmentResponse> create(
+            @ModelAttribute CreateEquipmentRequest request
+    ) {
         Long equipmentId = equipmentService.create(
                 request.getName(),
                 request.getDescription(),
                 request.getCategory(),
-                request.getImageUrl(),
+                request.getImage(),
                 request.getStock(),
                 request.getAvailable()
         );
@@ -65,13 +70,16 @@ public class EquipmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MessageResponse> update(@PathVariable Long id, @RequestBody UpdateEquipmentRequest request) {
+    public ResponseEntity<MessageResponse> update(
+            @PathVariable Long id,
+            @ModelAttribute UpdateEquipmentRequest request
+    ) {
         equipmentService.update(
                 id,
                 request.getName(),
                 request.getDescription(),
                 request.getCategory(),
-                request.getImageUrl(),
+                request.getImage(),
                 request.getStock(),
                 request.getAvailable()
         );
@@ -111,12 +119,12 @@ public class EquipmentController {
     }
 
     @Getter
-    @AllArgsConstructor
+    @Setter
     public static class CreateEquipmentRequest {
         private String name;
         private String description;
         private String category;
-        private String imageUrl;
+        private MultipartFile image;
         private Integer stock;
         private Boolean available;
     }
@@ -129,12 +137,12 @@ public class EquipmentController {
     }
 
     @Getter
-    @AllArgsConstructor
+    @Setter
     public static class UpdateEquipmentRequest {
         private String name;
         private String description;
         private String category;
-        private String imageUrl;
+        private MultipartFile image;
         private Integer stock;
         private Boolean available;
     }

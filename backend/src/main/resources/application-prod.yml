@@ -14,6 +14,14 @@ spring:
         show_sql: false
         generate_statistics: false
 
+# AWS S3 설정 (운영환경)
+aws:
+  s3:
+    access-key: ${AWS_S3_ACCESS_KEY}
+    secret-key: ${AWS_S3_SECRET_KEY}
+    bucket: ${AWS_S3_BUCKET}
+    region: ${AWS_S3_REGION:ap-northeast-2}
+
 logging:
   level:
     root: INFO

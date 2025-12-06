@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { ConfirmButton } from "@/components/ui/alert-dialog";
 import { SelectCustom } from "@/components/ui/select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import ImageUpload from "@/components/ImageUpload";
 
 interface Equipment {
   id: number;
@@ -25,7 +26,8 @@ interface EquipmentForm {
   name: string;
   description: string;
   category: string;
-  imageUrl: string;
+  imageFile: File | null;
+  currentImageUrl?: string; // 수정 시 기존 이미지 URL
   stock: number;
   available: boolean;
 }
@@ -48,7 +50,8 @@ export default function AdminEquipmentPage() {
     name: "",
     description: "",
     category: "",
-    imageUrl: "",
+    imageFile: null,
+    currentImageUrl: "",
     stock: 0,
     available: true,
   });
@@ -74,11 +77,13 @@ export default function AdminEquipmentPage() {
   }, [user, navigate]);
 
   const createMutation = useMutation({
-    mutationFn: (data: EquipmentForm) => api.post("/equipment", data),
+    mutationFn: (formData: FormData) =>
+      api.post("/equipment", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
     onSuccess: () => {
       toast.success("비품이 등록되었습니다.");
       handleCloseForm();
-      // 캐시 무효화 → 자동으로 목록 새로고침!
       queryClient.invalidateQueries({ queryKey: ["equipments"] });
     },
     onError: (error: Error) => {
@@ -88,8 +93,10 @@ export default function AdminEquipmentPage() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: EquipmentForm }) =>
-      api.put(`/equipment/${id}`, data),
+    mutationFn: ({ id, formData }: { id: number; formData: FormData }) =>
+      api.put(`/equipment/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
     onSuccess: () => {
       toast.success("비품이 수정되었습니다.");
       handleCloseForm();
@@ -120,7 +127,8 @@ export default function AdminEquipmentPage() {
         name: equipment.name,
         description: equipment.description,
         category: equipment.category,
-        imageUrl: equipment.imageUrl,
+        imageFile: null,
+        currentImageUrl: equipment.imageUrl,
         stock: equipment.stock,
         available: equipment.available,
       });
@@ -130,7 +138,8 @@ export default function AdminEquipmentPage() {
         name: "",
         description: "",
         category: "",
-        imageUrl: "",
+        imageFile: null,
+        currentImageUrl: "",
         stock: 0,
         available: true,
       });
@@ -152,10 +161,21 @@ export default function AdminEquipmentPage() {
       return;
     }
 
+    const submitFormData = new FormData();
+    submitFormData.append("name", formData.name);
+    submitFormData.append("description", formData.description || "");
+    submitFormData.append("category", formData.category);
+    submitFormData.append("stock", formData.stock.toString());
+    submitFormData.append("available", formData.available.toString());
+
+    if (formData.imageFile) {
+      submitFormData.append("image", formData.imageFile);
+    }
+
     if (editingId) {
-      updateMutation.mutate({ id: editingId, data: formData });
+      updateMutation.mutate({ id: editingId, formData: submitFormData });
     } else {
-      createMutation.mutate(formData);
+      createMutation.mutate(submitFormData);
     }
   };
 
@@ -260,15 +280,13 @@ export default function AdminEquipmentPage() {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                이미지 URL
+                이미지 (5MB 이하만 가능)
               </label>
-              <Input
-                type="text"
-                value={formData.imageUrl}
-                onChange={(e) =>
-                  setFormData({ ...formData, imageUrl: e.target.value })
+              <ImageUpload
+                onChange={(file) =>
+                  setFormData({ ...formData, imageFile: file })
                 }
-                placeholder="이미지 URL을 입력하세요"
+                initialPreview={formData.currentImageUrl}
               />
             </div>
 
