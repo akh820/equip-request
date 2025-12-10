@@ -45,9 +45,7 @@ export default function MyRequestsPage() {
         setRequests(response.data);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
-          setError(
-            err.response?.data?.message || t("requests.failedToLoad")
-          );
+          setError(err.response?.data?.message || t("requests.failedToLoad"));
         } else {
           setError(t("auth.unknownError"));
         }
@@ -114,7 +112,9 @@ export default function MyRequestsPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="bg-white p-4 rounded-sm border border-neutral-200 mb-6 shadow-sm">
-        <h2 className="text-lg font-bold text-neutral-700">{t("requests.myTitle")}</h2>
+        <h2 className="text-lg font-bold text-neutral-700">
+          {t("requests.myTitle")}
+        </h2>
         {/* <p className="text-sm text-neutral-500 mt-1">{t("requests.mySubtitle")}</p> */}
       </div>
 
@@ -144,11 +144,13 @@ export default function MyRequestsPage() {
                 <div className="flex items-center justify-between p-4 border-b border-neutral-200 bg-neutral-50">
                   <div className="flex items-center gap-4">
                     <span className="text-sm text-neutral-600">
-                      {t("requests.requestDate")}: {formatDate(request.createdAt)}
+                      {t("requests.requestDate")}:{" "}
+                      {formatDate(request.createdAt)}
                     </span>
                     {request.processedAt && (
                       <span className="text-sm text-neutral-600">
-                        {t("requests.processedDate")}: {formatDate(request.processedAt)}
+                        {t("requests.processedDate")}:{" "}
+                        {formatDate(request.processedAt)}
                       </span>
                     )}
                   </div>
@@ -173,7 +175,7 @@ export default function MyRequestsPage() {
                   </div>
 
                   {request.status === "REJECTED" && request.rejectReason && (
-                    <div className="mt-4 p-3 bg-neutral-50 border border-red -200 rounded">
+                    <div className="mt-4 p-3 bg-neutral-50 border border-red-200 rounded">
                       <p className="text-xs text-red-600 font-medium mb-1">
                         {t("requests.rejectReason")}
                       </p>
@@ -190,4 +192,3 @@ export default function MyRequestsPage() {
     </div>
   );
 }
-

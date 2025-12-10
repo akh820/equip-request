@@ -164,7 +164,7 @@ export function ConfirmButton({
       <AlertDialogTrigger asChild>
         <Button className={buttonClassName}>{buttonTitle}</Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded">
         <AlertDialogHeader>
           <AlertDialogTitle>{alertTitle}</AlertDialogTitle>
           {alertDescription && (
@@ -172,7 +172,9 @@ export function ConfirmButton({
           )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="rounded">{cancelText}</AlertDialogCancel>
+          <AlertDialogCancel className="rounded">
+            {cancelText}
+          </AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} asChild>
             <Button className={buttonClassName}>{confirmText}</Button>
           </AlertDialogAction>

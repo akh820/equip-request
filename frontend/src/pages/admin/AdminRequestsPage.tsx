@@ -270,7 +270,7 @@ export default function AdminRequestsPage() {
 
                   {/* 반려 사유 */}
                   {request.status === "REJECTED" && request.rejectReason && (
-                    <div className="mb-4 p-3 bg-red-100 border border-red-200 rounded">
+                    <div className="mb-4 p-3 bg-neutral-100 border border-red-200 rounded">
                       <p className="text-xs text-red-600 font-medium mb-1">
                         {t("requests.rejectReason")}
                       </p>
