@@ -1,4 +1,4 @@
-# 🏢 사내 비품 관리 시스템 (Internal Equipment Management System)
+# 🏢 社内備品管理システム (Internal Equipment Management System)
 
 <div align="center">
 
@@ -8,178 +8,176 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-### [🌐 사내비품관리시스템 접속하기](https://frontend-production-851a.up.railway.app/)
+### [🌐 社内備品管理システムにアクセス](https://frontend-production-851a.up.railway.app/)
 
-사내 비품의 효율적인 관리 및 신청을 위한 풀스택 웹 애플리케이션
+社内備品の効率的な管理と申請のためのフルスタック Web アプリケーション
 
-https://frontend-production-851a.up.railway.app/
-
-[주요 기능](#-주요-기능) • [기술 스택](#️-기술-스택) • [시작하기](#-시작하기) • [API 문서](#-api-문서)
+[主要機能](#-主要機能) • [技術スタック](#️-技術スタック) • [始め方](#-始め方) • [API ドキュメント](#-apiドキュメント)
 
 </div>
 
 ---
 
-## 📋 목차
+## 📋 目次
 
-- [주요 기능](#-주요-기능)
-- [기술 스택](#️-기술-스택)
-- [프로젝트 구조](#-프로젝트-구조)
-- [시작하기](#-시작하기)
-  - [사전 요구사항](#사전-요구사항)
-  - [설치](#설치)
-  - [환경 변수 설정](#환경-변수-설정)
-  - [실행](#실행)
-- [API 문서](#-api-문서)
-- [주요 화면](#-주요-화면)
-- [배포](#-배포)
-- [라이센스](#-라이센스)
-
----
-
-## ✨ 주요 기능
-
-### 👤 사용자 기능
-
-- **회원가입/로그인**: JWT 기반 인증 시스템
-- **비품 조회**: 카테고리별 비품 목록 및 상세 정보 확인
-- **비품 신청**: 장바구니 기능을 통한 다중 비품 신청
-- **신청 내역 관리**: 신청 상태(대기/승인/반려) 확인 및 추적
-- **다국어 지원**: 한국어/일본어 자동 감지 및 전환
-
-### 🔧 관리자 기능
-
-- **비품 관리**: 비품 등록, 수정, 삭제 및 재고 관리
-- **이미지 업로드**: AWS S3를 통한 비품 이미지 관리
-- **신청 관리**: 비품 신청 승인/반려 및 사유 기록
-- **실시간 통계**: 처리 대기/승인/반려 건수 대시보드
-
-### 🌐 공통 기능
-
-- **반응형 디자인**: 모바일, 태블릿, 데스크톱 최적화
-- **실시간 재고 확인**: 재고 부족/품절 시각적 표시
-- **가상화 리스트**: 대량 데이터 최적화 렌더링
-- **자동 토큰 갱신**: Refresh Token을 통한 세션 유지
+- [主要機能](#-主要機能)
+- [技術スタック](#️-技術スタック)
+- [プロジェクト構造](#-プロジェクト構造)
+- [始め方](#-始め方)
+  - [前提条件](#前提条件)
+  - [インストール](#インストール)
+  - [環境変数設定](#環境変数設定)
+  - [実行](#実行)
+- [API ドキュメント](#-apiドキュメント)
+- [主要画面](#️-主要画面)
+- [デプロイ](#-デプロイ)
+- [ライセンス](#-ライセンス)
 
 ---
 
-## 🛠️ 기술 스택
+## ✨ 主要機能
+
+### 👤 ユーザー機能
+
+- **会員登録/ログイン**: JWT ベースの認証システム
+- **備品閲覧**: カテゴリー別備品一覧および詳細情報確認
+- **備品申請**: カート機能による複数備品の一括申請
+- **申請履歴管理**: 申請状態（処理待ち/承認/却下）の確認と追跡
+- **多言語対応**: 韓国語/日本語の自動検出と切り替え
+
+### 🔧 管理者機能
+
+- **備品管理**: 備品の登録、編集、削除および在庫管理
+- **画像アップロード**: AWS S3 による備品画像管理
+- **申請管理**: 備品申請の承認/却下および理由の記録
+- **リアルタイム統計**: 処理待ち/承認/却下件数のダッシュボード
+
+### 🌐 共通機能
+
+- **レスポンシブデザイン**: モバイル、タブレット、デスクトップ最適化
+- **リアルタイム在庫確認**: 在庫不足/品切れの視覚的表示
+- **仮想化リスト**: 大量データの最適化レンダリング
+- **自動トークン更新**: Refresh Token によるセッション維持
+
+---
+
+## 🛠️ 技術スタック
 
 ### Backend
 
-| 기술            | 버전    | 용도              |
-| --------------- | ------- | ----------------- |
-| Spring Boot     | 3.4.12  | 백엔드 프레임워크 |
-| Java            | 17      | 프로그래밍 언어   |
-| Spring Security | -       | 인증/인가         |
-| JWT             | 0.12.3  | 토큰 기반 인증    |
-| Spring Data JPA | -       | ORM               |
-| MariaDB/MySQL   | -       | 데이터베이스      |
-| AWS S3          | 2.20.26 | 파일 저장소       |
-| Swagger         | 2.2.0   | API 문서화        |
+| 技術            | バージョン | 用途                       |
+| --------------- | ---------- | -------------------------- |
+| Spring Boot     | 3.4.12     | バックエンドフレームワーク |
+| Java            | 17         | プログラミング言語         |
+| Spring Security | -          | 認証/認可                  |
+| JWT             | 0.12.3     | トークンベース認証         |
+| Spring Data JPA | -          | ORM                        |
+| MariaDB/MySQL   | -          | データベース               |
+| AWS S3          | 2.20.26    | ファイルストレージ         |
+| Swagger         | 2.2.0      | API ドキュメント化         |
 
 ### Frontend
 
-| 기술           | 버전    | 용도            |
-| -------------- | ------- | --------------- |
-| React          | 19.2.0  | UI 라이브러리   |
-| TypeScript     | 5.9.3   | 타입 안정성     |
-| Vite           | 7.2.4   | 빌드 도구       |
-| TailwindCSS    | 4.1.17  | 스타일링        |
-| React Router   | 7.9.6   | 라우팅          |
-| Zustand        | 5.0.9   | 전역 상태 관리  |
-| TanStack Query | 5.90.12 | 서버 상태 관리  |
-| Axios          | 1.13.2  | HTTP 클라이언트 |
-| i18next        | 25.7.1  | 다국어 지원     |
-| React Virtuoso | 4.17.0  | 가상화 리스트   |
+| 技術           | バージョン | 用途               |
+| -------------- | ---------- | ------------------ |
+| React          | 19.2.0     | UI ライブラリ      |
+| TypeScript     | 5.9.3      | 型安全性           |
+| Vite           | 7.2.4      | ビルドツール       |
+| TailwindCSS    | 4.1.17     | スタイリング       |
+| React Router   | 7.9.6      | ルーティング       |
+| Zustand        | 5.0.9      | グローバル状態管理 |
+| TanStack Query | 5.90.12    | サーバー状態管理   |
+| Axios          | 1.13.2     | HTTP クライアント  |
+| i18next        | 25.7.1     | 多言語対応         |
+| React Virtuoso | 4.17.0     | 仮想化リスト       |
 
 ---
 
-## 📁 프로젝트 구조
+## 📁 プロジェクト構造
 
 ```
 equip-request/
-├── backend/                    # Spring Boot 백엔드
+├── backend/                    # Spring Boot バックエンド
 │   ├── src/main/java/backend/
-│   │   ├── config/            # 설정 파일 (Security, CORS, S3)
-│   │   ├── controller/        # REST API 컨트롤러
-│   │   ├── domain/            # JPA 엔티티
-│   │   ├── repository/        # JPA 리포지토리
-│   │   ├── service/           # 비즈니스 로직
-│   │   └── util/              # 유틸리티 (JWT, S3)
+│   │   ├── config/            # 設定ファイル (Security, CORS, S3)
+│   │   ├── controller/        # REST APIコントローラー
+│   │   ├── domain/            # JPAエンティティ
+│   │   ├── repository/        # JPAリポジトリ
+│   │   ├── service/           # ビジネスロジック
+│   │   └── util/              # ユーティリティ (JWT, S3)
 │   └── src/main/resources/
-│       ├── application.yml    # 메인 설정
-│       └── application-*.yml  # 프로파일별 설정
+│       ├── application.yml    # メイン設定
+│       └── application-*.yml  # プロファイル別設定
 │
-├── frontend/                   # React 프론트엔드
+├── frontend/                   # React フロントエンド
 │   ├── src/
-│   │   ├── common/            # 공통 컴포넌트 (Loading, etc)
-│   │   ├── components/        # UI 컴포넌트 (shadcn/ui)
-│   │   ├── pages/             # 페이지 컴포넌트
-│   │   │   ├── auth/          # 로그인/회원가입
-│   │   │   ├── equipment/     # 비품 목록/상세
-│   │   │   ├── cart/          # 장바구니
-│   │   │   ├── request/       # 신청 내역
-│   │   │   └── admin/         # 관리자 페이지
-│   │   ├── stores/            # Zustand 스토어
-│   │   ├── lib/               # 라이브러리 (API, i18n)
-│   │   ├── locales/           # 다국어 번역 파일
-│   │   └── types/             # TypeScript 타입 정의
-│   └── public/                # 정적 파일
+│   │   ├── common/            # 共通コンポーネント (Loading, etc)
+│   │   ├── components/        # UIコンポーネント (shadcn/ui)
+│   │   ├── pages/             # ページコンポーネント
+│   │   │   ├── auth/          # ログイン/会員登録
+│   │   │   ├── equipment/     # 備品一覧/詳細
+│   │   │   ├── cart/          # カート
+│   │   │   ├── request/       # 申請履歴
+│   │   │   └── admin/         # 管理者ページ
+│   │   ├── stores/            # Zustand ストア
+│   │   ├── lib/               # ライブラリ (API, i18n)
+│   │   ├── locales/           # 多言語翻訳ファイル
+│   │   └── types/             # TypeScript型定義
+│   └── public/                # 静的ファイル
 │
-└── README.md                   # 프로젝트 문서
+└── README.md                   # プロジェクトドキュメント
 ```
 
 ---
 
-## 🚀 시작하기
+## 🚀 始め方
 
-### 사전 요구사항
+### 前提条件
 
-다음 소프트웨어가 설치되어 있어야 합니다:
+以下のソフトウェアがインストールされている必要があります：
 
-- **Java 17** 이상
-- **Node.js 18** 이상
-- **npm** 또는 **yarn**
-- **MariaDB** 또는 **MySQL** 8.0 이상
-- **AWS 계정** (S3 사용 시)
+- **Java 17** 以上
+- **Node.js 18** 以上
+- **npm** または **yarn**
+- **MariaDB** または **MySQL** 8.0 以上
+- **AWS アカウント** (S3 使用時)
 
-### 설치
+### インストール
 
-#### 1. 저장소 클론
+#### 1. リポジトリのクローン
 
 ```bash
 git clone https://github.com/akh820/equip-request.git
 cd equip-request
 ```
 
-#### 2. 백엔드 설정
+#### 2. バックエンド設定
 
 ```bash
 cd backend
 
-# Gradle 의존성 다운로드
+# Gradle依存関係のダウンロード
 ./gradlew build
 ```
 
-#### 3. 프론트엔드 설정
+#### 3. フロントエンド設定
 
 ```bash
 cd frontend
 
-# 의존성 설치
+# 依存関係のインストール
 npm install
-# 또는
+# または
 yarn install
 ```
 
-### 환경 변수 설정
+### 環境変数設定
 
 #### Backend (`backend/.env`)
 
 ```env
 # Database
-DB_URL=jdbc:mysql://localhost:3306/equipment_request_db?useSSL=false&serverTimezone=Asia/Seoul
+DB_URL=jdbc:mysql://localhost:3306/equipment_request_db?useSSL=false&serverTimezone=Asia/Tokyo
 DB_USERNAME=root
 DB_PASSWORD=your_password
 
@@ -191,7 +189,7 @@ JWT_REFRESH_EXPIRATION=604800000
 # AWS S3
 AWS_ACCESS_KEY=your-aws-access-key
 AWS_SECRET_KEY=your-aws-secret-key
-AWS_REGION=ap-northeast-2
+AWS_REGION=ap-northeast-1
 AWS_S3_BUCKET=your-bucket-name
 
 # CORS
@@ -204,175 +202,175 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
 VITE_API_BASE_URL=http://localhost:8080
 ```
 
-### 데이터베이스 초기화
+### データベース初期化
 
 ```sql
 CREATE DATABASE equipment_request_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-애플리케이션 실행 시 JPA가 자동으로 테이블을 생성합니다.
+アプリケーション実行時に JPA が自動的にテーブルを作成します。
 
-### 실행
+### 実行
 
-#### 백엔드 실행
+#### バックエンド実行
 
 ```bash
 cd backend
 ./gradlew bootRun
 ```
 
-서버가 `http://localhost:8080`에서 실행됩니다.
+サーバーが `http://localhost:8080` で起動します。
 
-#### 프론트엔드 실행 (개발 모드)
+#### フロントエンド実行（開発モード）
 
 ```bash
 cd frontend
 npm run dev
-# 또는
+# または
 yarn dev
 ```
 
-프론트엔드가 `http://localhost:5173`에서 실행됩니다.
+フロントエンドが `http://localhost:5173` で起動します。
 
-#### 프론트엔드 빌드 및 프로덕션 실행
+#### フロントエンドビルドおよびプロダクション実行
 
 ```bash
 cd frontend
 
-# 빌드
+# ビルド
 npm run build
 
-# 프로덕션 서버 실행
+# プロダクションサーバー実行
 npm run start
 ```
 
 ---
 
-## 📚 API 문서
+## 📚 API ドキュメント
 
 ### Swagger UI
 
-백엔드 실행 후 다음 URL에서 API 문서를 확인할 수 있습니다:
+バックエンド実行後、以下の URL で API ドキュメントを確認できます：
 
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
 
-### 주요 엔드포인트
+### 主要エンドポイント
 
-#### 인증 (`/auth`)
+#### 認証 (`/auth`)
 
-- `POST /auth/signup` - 회원가입
-- `POST /auth/login` - 로그인
-- `POST /auth/refresh` - 토큰 갱신
+- `POST /auth/signup` - 会員登録
+- `POST /auth/login` - ログイン
+- `POST /auth/refresh` - トークン更新
 
-#### 비품 (`/equipment`)
+#### 備品 (`/equipment`)
 
-- `GET /equipment` - 비품 목록 조회
-- `GET /equipment/{id}` - 비품 상세 조회
-- `POST /equipment` - 비품 등록 (관리자)
-- `PUT /equipment/{id}` - 비품 수정 (관리자)
-- `DELETE /equipment/{id}` - 비품 삭제 (관리자)
+- `GET /equipment` - 備品一覧取得
+- `GET /equipment/{id}` - 備品詳細取得
+- `POST /equipment` - 備品登録（管理者）
+- `PUT /equipment/{id}` - 備品編集（管理者）
+- `DELETE /equipment/{id}` - 備品削除（管理者）
 
-#### 신청 (`/requests`)
+#### 申請 (`/requests`)
 
-- `GET /requests/my` - 내 신청 목록
-- `POST /requests` - 비품 신청
-- `GET /requests/admin/all` - 전체 신청 목록 (관리자)
-- `POST /requests/admin/{id}/approve` - 신청 승인 (관리자)
-- `POST /requests/admin/{id}/reject` - 신청 반려 (관리자)
-
----
-
-## 🖼️ 주요 화면
-
-### 사용자 화면
-
-- **로그인/회원가입**: JWT 기반 인증
-- **비품 목록**: 카테고리별 필터링 및 검색
-- **비품 상세**: 재고 확인 및 장바구니 담기
-- **장바구니**: 다중 비품 선택 및 신청
-- **신청 내역**: 상태별 필터링 및 추적
-
-### 관리자 화면
-
-- **비품 관리**: CRUD 및 이미지 업로드
-- **신청 관리**: 승인/반려 처리 및 통계 대시보드
+- `GET /requests/my` - マイ申請一覧
+- `POST /requests` - 備品申請
+- `GET /requests/admin/all` - 全申請一覧（管理者）
+- `POST /requests/admin/{id}/approve` - 申請承認（管理者）
+- `POST /requests/admin/{id}/reject` - 申請却下（管理者）
 
 ---
 
-## 🔐 인증 흐름
+## 🖼️ 主要画面
+
+### ユーザー画面
+
+- **ログイン/会員登録**: JWT ベース認証
+- **備品一覧**: カテゴリー別フィルタリングおよび検索
+- **備品詳細**: 在庫確認およびカートに追加
+- **カート**: 複数備品選択および申請
+- **申請履歴**: 状態別フィルタリングおよび追跡
+
+### 管理者画面
+
+- **備品管理**: CRUD および画像アップロード
+- **申請管理**: 承認/却下処理および統計ダッシュボード
+
+---
+
+## 🔐 認証フロー
 
 ```
-1. 사용자 로그인
+1. ユーザーログイン
    ↓
-2. 서버가 Access Token + Refresh Token 발급
+2. サーバーがAccess Token + Refresh Tokenを発行
    ↓
-3. Access Token을 헤더에 포함하여 API 요청
+3. Access Tokenをヘッダーに含めてAPIリクエスト
    ↓
-4. Access Token 만료 시
+4. Access Token期限切れ時
    ↓
-5. Refresh Token으로 새 Access Token 발급
+5. Refresh Tokenで新しいAccess Tokenを発行
    ↓
-6. 재시도
+6. リトライ
 ```
 
 ---
 
-## 📦 배포
+## 📦 デプロイ
 
-### 백엔드 배포 (예: AWS EC2)
+### バックエンドデプロイ（例：AWS EC2）
 
 ```bash
-# 빌드
+# ビルド
 ./gradlew build
 
-# JAR 실행
+# JAR実行
 java -jar build/libs/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
-### 프론트엔드 배포 (예: Vercel, Netlify)
+### フロントエンドデプロイ（例：Vercel、Netlify）
 
 ```bash
-# 빌드
+# ビルド
 npm run build
 
-# dist 폴더를 배포
+# distフォルダをデプロイ
 ```
 
 ---
 
-## 🐛 트러블슈팅
+## 🐛 トラブルシューティング
 
-### 자주 발생하는 문제
+### よくある問題
 
-#### CORS 오류
+#### CORS エラー
 
 ```bash
-# backend/.env 파일에서 CORS_ALLOWED_ORIGINS 확인
+# backend/.env ファイルでCORS_ALLOWED_ORIGINSを確認
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
 ```
 
-#### JWT 토큰 만료
+#### JWT トークン期限切れ
 
-- Access Token이 만료되면 자동으로 Refresh Token을 사용하여 갱신
-- 문제 지속 시 로그아웃 후 재로그인
+- Access Token が期限切れになると自動的に Refresh Token を使用して更新
+- 問題が続く場合はログアウト後に再ログイン
 
-#### S3 업로드 실패
+#### S3 アップロード失敗
 
-- AWS 자격증명 확인
-- S3 버킷 권한 확인 (public-read 설정 필요)
+- AWS 認証情報を確認
+- S3 バケット権限を確認（public-read 設定が必要）
 
-#### 카트 데이터 문제
+#### カートデータの問題
 
-- 로그아웃 시 카트는 자동으로 초기화됩니다
-- 현재 카트 데이터는 localStorage에만 저장됩니다 (DB 저장 안 함)
+- ログアウト時にカートは自動的に初期化されます
+- 現在カートデータは localStorage にのみ保存されます（DB 保存なし）
 
 ---
 
-## 🏗️ 아키텍처
+## 🏗️ アーキテクチャ
 
-### 데이터 흐름
+### データフロー
 
 ```
 Frontend (React)
@@ -385,26 +383,26 @@ Frontend
     ↓ Multipart
 Backend
     ↓ AWS SDK
-S3 (이미지 저장)
+S3 (画像保存)
 ```
 
-### 상태 관리
+### 状態管理
 
-- **Zustand**: 전역 상태 (인증, 카트)
-- **TanStack Query**: 서버 상태 (비품, 신청)
-- **localStorage**: 영구 저장 (인증 토큰, 카트)
-
----
-
-## 🎨 디자인 시스템
-
-- **shadcn/ui**: 재사용 가능한 UI 컴포넌트
-- **TailwindCSS 4**: 유틸리티 우선 스타일링
-- **Radix UI**: 접근성 높은 프리미티브 컴포넌트
-- **Lucide React**: 일관된 아이콘 시스템
+- **Zustand**: グローバル状態（認証、カート）
+- **TanStack Query**: サーバー状態（備品、申請）
+- **localStorage**: 永続保存（認証トークン、カート）
 
 ---
 
-## 📝 라이센스
+## 🎨 デザインシステム
 
-이 프로젝트는 MIT 라이센스 하에 있습니다.
+- **shadcn/ui**: 再利用可能な UI コンポーネント
+- **TailwindCSS 4**: ユーティリティファーストスタイリング
+- **Radix UI**: アクセシビリティの高いプリミティブコンポーネント
+- **Lucide React**: 一貫したアイコンシステム
+
+---
+
+## 📝 ライセンス
+
+このプロジェクトは MIT ライセンスの下にあります。
