@@ -1,0 +1,46 @@
+name: Deploy Backend to EC2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'           
+      - 'docker-compose.yml'   
+      - '.github/workflows/deploy-backend.yml'  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}      
+          username: ubuntu                    
+          key: ${{ secrets.EC2_SSH_KEY }}    
+          
+          envs: MYSQL_ROOT_PASSWORD,JWT_SECRET,JWT_ACCESS_EXPIRATION,JWT_REFRESH_EXPIRATION,AWS_S3_ACCESS_KEY,AWS_S3_SECRET_KEY,AWS_S3_REGION,AWS_S3_BUCKET
+          
+          script: |
+            cd ~/equip-request
+            
+            git pull origin main
+            
+            cat > .env << EOF
+            MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            JWT_ACCESS_EXPIRATION=${{ secrets.JWT_ACCESS_EXPIRATION }}
+            JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }}
+            AWS_S3_ACCESS_KEY=${{ secrets.AWS_S3_ACCESS_KEY }}
+            AWS_S3_SECRET_KEY=${{ secrets.AWS_S3_SECRET_KEY }}
+            AWS_S3_REGION=${{ secrets.AWS_S3_REGION }}
+            AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }}
+            EOF
+            
+            docker-compose up -d --build backend
+            
+            docker image prune -f

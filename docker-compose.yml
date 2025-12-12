@@ -1,0 +1,54 @@
+services:
+  mysql:
+    image: mysql:8.0
+    
+    container_name: equip-mysql
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: equipdb
+    
+    ports:
+      - "3306:3306"
+    
+    volumes:
+      - mysql_data:/var/lib/mysql
+    
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    
+    container_name: equip-backend
+    
+    ports:
+      - "8080:8080"
+    
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/equipdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_EXPIRATION=${JWT_ACCESS_EXPIRATION:-3600000}    
+      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION:-604800000}  
+      
+      - AWS_S3_ACCESS_KEY=${AWS_S3_ACCESS_KEY}
+      - AWS_S3_SECRET_KEY=${AWS_S3_SECRET_KEY}
+      - AWS_S3_REGION=${AWS_S3_REGION}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
+    
+    depends_on:
+      mysql:
+        condition: service_healthy
+    
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
