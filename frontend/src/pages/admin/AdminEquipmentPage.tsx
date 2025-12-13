@@ -337,9 +337,12 @@ export default function AdminEquipmentPage() {
             <div className="flex gap-2">
               <Button
                 type="submit"
-                className="bg-neutral-700 hover:bg-neutral-800 text-white rounded"
+                disabled={createMutation.isPending || updateMutation.isPending}
+                className="bg-neutral-700 hover:bg-neutral-800 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {editingId ? t("common.edit") : t("common.submit")}
+                {createMutation.isPending || updateMutation.isPending
+                  ? t("common.loading") || "처리 중..."
+                  : editingId ? t("common.edit") : t("common.submit")}
               </Button>
               <Button
                 type="button"
