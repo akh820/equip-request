@@ -7,12 +7,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: equipdb
+      TZ: Asia/Seoul
     
     ports:
       - "3306:3306"
     
     volumes:
       - mysql_data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro 
     
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -31,7 +33,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/equipdb
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/equipdb?serverTimezone=Asia/Seoul
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD}
       
@@ -48,6 +50,9 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    
+    volumes:
+      - /etc/localtime:/etc/localtime:ro  
     
     restart: unless-stopped
 
