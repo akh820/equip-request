@@ -192,7 +192,7 @@ export function SelectCustom({
   options,
   placeholder = "선택하세요",
   label,
-  className = "w-full",
+  className = "w-full rounded",
   required = false,
 }: SelectCustomProps) {
   return (
