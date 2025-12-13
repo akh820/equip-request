@@ -4,7 +4,6 @@ import { Link } from "react-router";
 import { Package, ShoppingCart, ClipboardList, Settings } from "lucide-react";
 
 export default function HomePage() {
-  //test
   const { user, isAuthenticated } = useAuthStore();
   const { items } = useCartStore();
 
