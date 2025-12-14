@@ -8,7 +8,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-### [🌐 사내비품관리시스템 접속하기](https://d16rimjdszzw8n.cloudfront.net/)
+### [🌐 사내비품관리시스템 접속하기](https://d2j1vq9s2zdy53.cloudfront.net/)
 
 사내 비품의 효율적인 관리 및 신청을 위한 풀스택 웹 애플리케이션
 

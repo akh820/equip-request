@@ -8,7 +8,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-### [🌐 社内備品管理システムにアクセス](https://d16rimjdszzw8n.cloudfront.net/)
+### [🌐 社内備品管理システムにアクセス](https://d2j1vq9s2zdy53.cloudfront.net/)
 
 **🏗️ AWS アーキテクチャ**: S3 + CloudFront + EC2
 社内備品の効率的な管理と申請のためのフルスタック Web アプリケーション
