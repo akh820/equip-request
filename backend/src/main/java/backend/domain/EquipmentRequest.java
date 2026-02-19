@@ -1,8 +1,10 @@
 package backend.domain;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,24 +43,39 @@ public class EquipmentRequest extends BaseEntity {
 
     @Column(name = "processed_at")
     private LocalDateTime processedAt;
+
+    @Column(name = "return_token")
+    private String returnToken;
+
+    @Column(name = "returned_at")
+    private LocalDateTime returnedAt;
+
     //fetch = FetchType.EAGET => LAZY
     @OneToMany(mappedBy = "equipmentRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<RequestItem> items = new ArrayList<>();
 
     public enum RequestStatus {
-        PENDING, APPROVED, REJECTED
+        PENDING, APPROVED, REJECTED, RETURNED
     }
 
     public void approve() {
         this.status = RequestStatus.APPROVED;
         this.processedAt = LocalDateTime.now();
+        String datePrefix = this.processedAt.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String random = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+        this.returnToken = datePrefix + "_" + random;
     }
 
     public void reject(String reason) {
         this.status = RequestStatus.REJECTED;
         this.rejectReason = reason;
         this.processedAt = LocalDateTime.now();
+    }
+
+    public void markAsReturned() {
+        this.status = RequestStatus.RETURNED;
+        this.returnedAt = LocalDateTime.now();
     }
 
     // RequestItem 양방향 연관관계 편의 메서드

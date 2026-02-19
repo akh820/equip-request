@@ -37,4 +37,11 @@ public interface EquipmentRequestRepository extends JpaRepository<EquipmentReque
     List<EquipmentRequest> findByStatus(RequestStatus status);
 
     List<EquipmentRequest> findByStatusOrderByCreatedAtAsc(RequestStatus status);
+
+    @Query("SELECT DISTINCT r FROM EquipmentRequest r " +
+           "JOIN FETCH r.items i " +
+           "JOIN FETCH i.equipment " +
+           "JOIN FETCH r.user " +
+           "WHERE r.returnToken = :returnToken")
+    Optional<EquipmentRequest> findByReturnTokenWithItems(@Param("returnToken") String returnToken);
 }

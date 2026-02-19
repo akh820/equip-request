@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.domain.EquipmentRequest;
@@ -76,6 +77,29 @@ public class EquipmentRequestController {
         return ResponseEntity.ok("반려 완료");
     }
 
+    @GetMapping("/admin/return")
+    public ResponseEntity<ReturnInfoResponse> getReturnInfo(@RequestParam String token) {
+        EquipmentRequestService.ReturnValidationResult result = requestService.validateReturnToken(token);
+
+        ReturnInfoResponse response;
+        if (result.getRequest() == null) {
+            response = ReturnInfoResponse.notFound();
+        } else {
+            response = ReturnInfoResponse.from(result.getTokenStatus(), result.getRequest());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/admin/return/confirm")
+    public ResponseEntity<String> confirmReturn(@RequestParam String token) {
+        try {
+            requestService.processReturn(token);
+            return ResponseEntity.ok("반납 완료");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @Getter
     @AllArgsConstructor
     public static class CreateRequestRequest {
@@ -108,6 +132,8 @@ public class EquipmentRequestController {
         private String createdAt;
         private String processedAt;
         private String rejectReason;
+        private String returnToken;
+        private String returnedAt;
 
         public static RequestResponse from(EquipmentRequest request) {
             List<RequestItemResponse> items = request.getItems().stream()
@@ -127,7 +153,66 @@ public class EquipmentRequestController {
                     items,
                     request.getCreatedAt().toString(),
                     request.getProcessedAt() != null ? request.getProcessedAt().toString() : null,
-                    request.getRejectReason()
+                    request.getRejectReason(),
+                    request.getReturnToken(),
+                    request.getReturnedAt() != null ? request.getReturnedAt().toString() : null
+            );
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ReturnItemResponse {
+        private String equipmentName;
+        private Integer quantity;
+    }
+
+    @Getter
+    public static class ReturnInfoResponse {
+        private String tokenStatus;
+        private Long requestId;
+        private String userName;
+        private List<ReturnItemResponse> items;
+        private String approvedAt;
+        private String expiresAt;
+        private String returnedAt;
+
+        private ReturnInfoResponse(String tokenStatus, Long requestId, String userName,
+                List<ReturnItemResponse> items, String approvedAt, String expiresAt, String returnedAt) {
+            this.tokenStatus = tokenStatus;
+            this.requestId = requestId;
+            this.userName = userName;
+            this.items = items;
+            this.approvedAt = approvedAt;
+            this.expiresAt = expiresAt;
+            this.returnedAt = returnedAt;
+        }
+
+        public static ReturnInfoResponse notFound() {
+            return new ReturnInfoResponse("NOT_FOUND", null, null, null, null, null, null);
+        }
+
+        public static ReturnInfoResponse from(String tokenStatus, EquipmentRequest request) {
+            List<ReturnItemResponse> items = request.getItems().stream()
+                    .map(item -> new ReturnItemResponse(
+                            item.getEquipment().getName(),
+                            item.getQuantity()
+                    ))
+                    .collect(Collectors.toList());
+
+            String approvedAt = request.getProcessedAt() != null ? request.getProcessedAt().toString() : null;
+            String expiresAt = request.getProcessedAt() != null
+                    ? request.getProcessedAt().plusDays(30).toString() : null;
+            String returnedAt = request.getReturnedAt() != null ? request.getReturnedAt().toString() : null;
+
+            return new ReturnInfoResponse(
+                    tokenStatus,
+                    request.getId(),
+                    request.getUser().getName(),
+                    items,
+                    approvedAt,
+                    expiresAt,
+                    returnedAt
             );
         }
     }
