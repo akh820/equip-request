@@ -18,11 +18,12 @@ interface Request {
   id: number;
   userId: number;
   userName: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  status: "PENDING" | "APPROVED" | "REJECTED" | "RETURNED";
   items: RequestItem[];
   createdAt: string;
   processedAt?: string;
   rejectReason?: string;
+  returnedAt?: string;
 }
 
 export default function MyRequestsPage() {
@@ -67,7 +68,7 @@ export default function MyRequestsPage() {
         );
       case "APPROVED":
         return (
-          <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs rounded border border-emerald-200">
+          <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded border border-blue-200">
             {t("requests.status.approved")}
           </span>
         );
@@ -75,6 +76,12 @@ export default function MyRequestsPage() {
         return (
           <span className="px-3 py-1 bg-red-100 text-red-700 text-xs rounded border border-red-200">
             {t("requests.status.rejected")}
+          </span>
+        );
+      case "RETURNED":
+        return (
+          <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs rounded border border-emerald-200">
+            {t("requests.status.returned")}
           </span>
         );
       default:
@@ -115,7 +122,6 @@ export default function MyRequestsPage() {
         <h2 className="text-lg font-bold text-neutral-700">
           {t("requests.myTitle")}
         </h2>
-        {/* <p className="text-sm text-neutral-500 mt-1">{t("requests.mySubtitle")}</p> */}
       </div>
 
       {requests.length === 0 ? (
@@ -151,6 +157,12 @@ export default function MyRequestsPage() {
                       <span className="text-sm text-neutral-600">
                         {t("requests.processedDate")}:{" "}
                         {formatDate(request.processedAt)}
+                      </span>
+                    )}
+                    {request.returnedAt && (
+                      <span className="text-sm text-neutral-600">
+                        {t("return.returnedAt")}:{" "}
+                        {formatDate(request.returnedAt)}
                       </span>
                     )}
                   </div>
