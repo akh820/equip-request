@@ -97,15 +97,37 @@
     "failedToLoad": "申請履歴の読み込みに失敗しました。",
     "stats": {
       "pending": "処理待ち",
-      "approved": "承認完了",
+      "approved": "返却待ち",
       "rejected": "却下",
+      "returned": "返却完了",
       "count": "{{count}}件"
     },
     "status": {
       "pending": "処理待ち",
-      "approved": "承認済み",
-      "rejected": "却下済み"
+      "approved": "返却待ち",
+      "rejected": "却下済み",
+      "returned": "返却完了"
     }
+  },
+  "return": {
+    "showQR": "返却QR",
+    "qrTitle": "返却QRコード",
+    "qrDescription": "管理者がこのQRコードをスキャンして返却処理をします。",
+    "adminOnly": "管理者のみアクセス可能です。",
+    "invalid": "無効な返却コードです。",
+    "expired": "返却期限が過ぎましたので、人事部にお問い合わせください。",
+    "alreadyReturned": "すでに返却処理済みです。",
+    "returnedAt": "返却日",
+    "confirm": "返却確認",
+    "confirmTitle": "返却処理",
+    "expiresAt": "返却有効期限",
+    "approvedAt": "承認日",
+    "requester": "申請者",
+    "items": "備品一覧",
+    "success": "返却処理が完了しました。",
+    "returnFailed": "返却処理に失敗しました。",
+    "loading": "返却情報を読み込み中...",
+    "close": "閉じる"
   },
   "admin": {
     "title": "管理者ページ",
@@ -162,6 +184,7 @@
       "noRequests": "処理する申請がありません。",
       "applicant": "申請者",
       "approve": "承認",
+      "approveConfirm": "承認しますか？",
       "reject": "却下",
       "rejectReasonPlaceholder": "却下理由を入力してください",
       "approved": "申請が承認されました。",

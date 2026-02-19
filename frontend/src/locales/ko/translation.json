@@ -97,15 +97,37 @@
     "failedToLoad": "신청 내역을 불러오는데 실패했습니다.",
     "stats": {
       "pending": "처리 대기",
-      "approved": "승인 완료",
+      "approved": "반납대기",
       "rejected": "반려",
+      "returned": "반납완료",
       "count": "{{count}}건"
     },
     "status": {
       "pending": "대기 중",
-      "approved": "승인됨",
-      "rejected": "반려됨"
+      "approved": "반납대기",
+      "rejected": "반려됨",
+      "returned": "반납완료"
     }
+  },
+  "return": {
+    "showQR": "반납 QR",
+    "qrTitle": "반납 QR 코드",
+    "qrDescription": "관리자가 이 QR코드를 스캔하여 반납 처리합니다.",
+    "adminOnly": "관리자만 접근 가능합니다.",
+    "invalid": "유효하지 않은 반납 코드입니다.",
+    "expired": "반납기간이 지났으므로 인사부에 문의해주세요.",
+    "alreadyReturned": "이미 반납 처리 되었습니다.",
+    "returnedAt": "반납일",
+    "confirm": "반납 확인",
+    "confirmTitle": "반납 처리",
+    "expiresAt": "반납 유효기간",
+    "approvedAt": "승인일",
+    "requester": "신청자",
+    "items": "비품 목록",
+    "success": "반납 처리가 완료되었습니다.",
+    "returnFailed": "반납 처리에 실패했습니다.",
+    "loading": "반납 정보를 불러오는 중...",
+    "close": "닫기"
   },
   "admin": {
     "title": "관리자 페이지",
@@ -162,6 +184,7 @@
       "noRequests": "처리할 신청이 없습니다.",
       "applicant": "신청자",
       "approve": "승인",
+      "approveConfirm": "승인하시겠습니까?",
       "reject": "반려",
       "rejectReasonPlaceholder": "반려 사유를 입력하세요",
       "approved": "신청이 승인되었습니다.",
