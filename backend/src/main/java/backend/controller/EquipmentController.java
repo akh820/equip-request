@@ -39,13 +39,13 @@ public class EquipmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EquipmentResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<EquipmentResponse> findById(@PathVariable("id") Long id) {
         Equipment equipment = equipmentService.findById(id);
         return ResponseEntity.ok(EquipmentResponse.from(equipment));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<EquipmentResponse>> search(@RequestParam String keyword) {
+    public ResponseEntity<List<EquipmentResponse>> search(@RequestParam("keyword") String keyword) {
         List<Equipment> equipmentList = equipmentService.search(keyword);
         List<EquipmentResponse> response = equipmentList.stream()
                 .map(EquipmentResponse::from)
@@ -71,7 +71,7 @@ public class EquipmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MessageResponse> update(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @ModelAttribute UpdateEquipmentRequest request
     ) {
         equipmentService.update(
@@ -87,7 +87,7 @@ public class EquipmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResponse> delete(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> delete(@PathVariable("id") Long id) {
         equipmentService.delete(id);
         return ResponseEntity.ok(new MessageResponse("비품 삭제 성공"));
     }

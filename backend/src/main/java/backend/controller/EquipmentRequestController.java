@@ -17,6 +17,7 @@ import backend.domain.EquipmentRequest;
 import backend.service.EquipmentRequestService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -66,19 +67,19 @@ public class EquipmentRequestController {
     }
 
     @PostMapping("/admin/{id}/approve")
-    public ResponseEntity<String> approve(@PathVariable Long id) {
+    public ResponseEntity<String> approve(@PathVariable("id") Long id) {
         requestService.approve(id);
         return ResponseEntity.ok("승인 완료");
     }
 
     @PostMapping("/admin/{id}/reject")
-    public ResponseEntity<String> reject(@PathVariable Long id, @RequestBody RejectRequest request) {
+    public ResponseEntity<String> reject(@PathVariable("id") Long id, @RequestBody RejectRequest request) {
         requestService.reject(id, request.getReason());
         return ResponseEntity.ok("반려 완료");
     }
 
     @GetMapping("/admin/return")
-    public ResponseEntity<ReturnInfoResponse> getReturnInfo(@RequestParam String token) {
+    public ResponseEntity<ReturnInfoResponse> getReturnInfo(@RequestParam("token") String token) {
         EquipmentRequestService.ReturnValidationResult result = requestService.validateReturnToken(token);
 
         ReturnInfoResponse response;
@@ -91,7 +92,7 @@ public class EquipmentRequestController {
     }
 
     @PostMapping("/admin/return/confirm")
-    public ResponseEntity<String> confirmReturn(@RequestParam String token) {
+    public ResponseEntity<String> confirmReturn(@RequestParam("token") String token) {
         try {
             requestService.processReturn(token);
             return ResponseEntity.ok("반납 완료");
@@ -101,6 +102,7 @@ public class EquipmentRequestController {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateRequestRequest {
         private Long userId;
@@ -108,6 +110,7 @@ public class EquipmentRequestController {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class RequestItemRequest {
         private Long equipmentId;
@@ -227,6 +230,7 @@ public class EquipmentRequestController {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class RejectRequest {
         private String reason;

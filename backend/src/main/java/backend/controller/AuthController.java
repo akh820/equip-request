@@ -12,6 +12,7 @@ import backend.service.UserService;
 import backend.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -64,6 +65,7 @@ public class AuthController {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class SignupRequest {
         private String email;
@@ -79,6 +81,7 @@ public class AuthController {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginRequest {
         private String email;
